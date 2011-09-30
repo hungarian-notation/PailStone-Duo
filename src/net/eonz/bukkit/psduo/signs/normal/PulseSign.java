@@ -39,21 +39,13 @@ public class PulseSign extends PSSign {
 	private boolean ticking = false;
 	private int timer;
 	
-	private boolean pulsed = false;
-	
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
 
 		if (is == InputState.HIGH && !lastState) {
-			lastState = true;
-
-			// SIGN WENT HIGH
-			
+			if (risingPulse) pulse();
 		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
-			lastState = false;
-
-			// SIGN WENT LOW
-			
+			if (fallingPulse) pulse();
 		} else {
 			return;
 		}
@@ -66,7 +58,6 @@ public class PulseSign extends PSSign {
 			ticking = true;
 			this.setOutput(true);
 		}
-		pulsed = true;
 	}
 	
 	public boolean tick() {
@@ -88,10 +79,36 @@ public class PulseSign extends PSSign {
 		// This sign does not use data.
 	}
 
+	boolean risingPulse = false;
+	boolean fallingPulse = false;
+	
 	protected void declare(boolean reload, SignChangeEvent event) {
-		main.sgc.register(this, TriggerType.TIMER_SECOND);
+		String edgeLine = this.getLines(event)[1].trim();
+		
+		if (edgeLine.equals("")) {
+			edgeLine = "RISING";
+		}
+		
+		if (edgeLine.equalsIgnoreCase("RISING")) {
+			risingPulse = true;
+		} else if (edgeLine.equalsIgnoreCase("FALLING")) {
+			fallingPulse = true;
+		} else {
+			if (!reload) {
+				this.init("There was an error reading the edge you specified.");
+				this.init("    Allowed: RISING, FALLING, BOTH");
+				event.setCancelled(true);
+			}
+			return;
+		}
+		
 		if (!reload) {
-			this.init("Test sign accepted.");
+			this.setLine(1, edgeLine.toUpperCase(), event);
+		}
+		
+		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
+		if (!reload) {
+			this.init("Pulse sign accepted.");
 		}
 	}
 
