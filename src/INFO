@@ -1,0 +1,35 @@
+TODO
+
+	- Fix :cuboid to apply data even when material isn't set.
+
+CHANGELOG
+
+3.6
+
+	Added :click, :count
+	Fixed a bug where placing identical signs in the same space in succession would leave all of them registered.
+	Added support for bukkit permissions and PEX.
+
+3.5
+
+	Added :delay, :toggle, :clock, :rand
+
+3.4
+
+	Fixed minor errors in text prompts
+	Added :item, :logged
+	Added config file
+	Added sign wipe protection to combat standing bugs in vanilla minecraft (toggleable in config)
+	Added variable cuboid limit, settable in config.
+
+3.3
+
+    Fixed bug with a single input not working when extra inputs were wired.
+    Fixed bug where signs with blank lines would not always load.
+    Optimization.
+
+3.2
+
+	Added :cweather
+	Added data values to :cuboid
+	Fixed bug where :send signs fired in rapid succession would not always trigger their :recv signs.

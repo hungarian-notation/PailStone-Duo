@@ -1,0 +1,64 @@
+name: PailStone
+main: net.eonz.bukkit.psduo.PailStone
+version: 3.6
+
+author: Hafnium
+website: pailstone.eonz.net
+
+softdepend: [PermissionsEx]
+
+commands:
+    trigger:
+        description: Triggers a PailStone :command IC. 
+        usage: /<command> <trigger>
+        aliases: [ t ]
+    pailstone:
+        description: Do a pailstone command. 
+        usage: /<command> <sub-command>[ <arguments>]
+        aliases: [ ps ]
+
+permissions:
+    pailstone.test:
+        default: op
+    pailstone.rand:
+        default: true
+    pailstone.logic: 
+        default: true
+    pailstone.delay:
+        default: true
+    pailstone.toggle:
+        default: true
+    pailstone.send:
+        default: true
+    pailstone.recv:
+        default: true
+    pailstone.trigger:
+        default: true
+    pailstone.click:
+        default: true
+    pailstone.count:
+        default: true
+    pailstone.clock:
+        default: true
+    pailstone.ctime:
+        default: true
+    pailstone.cweather:
+        default: true
+    pailstone.logged:
+        default: true
+    pailstone.sensor:
+        default: true
+    pailstone.disp:
+        default: true
+    pailstone.announce:
+        default: true
+    pailstone.cuboid:
+        default: op
+    pailstone.set:
+        default: op
+    pailstone.spawn:
+        default: op
+    pailstone.item:
+        default: op
+    pailstone.bolt:
+        default: op
