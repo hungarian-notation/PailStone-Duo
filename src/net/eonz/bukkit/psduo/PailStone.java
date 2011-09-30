@@ -44,8 +44,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 
-// First time using github, does this work?
-
 public class PailStone extends JavaPlugin {
 
 	/**
