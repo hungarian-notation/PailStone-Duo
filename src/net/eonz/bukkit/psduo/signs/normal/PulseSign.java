@@ -41,11 +41,13 @@ public class PulseSign extends PSSign {
 	
 	protected void triggersign(TriggerType type, Object args) {
 		InputState is = this.getInput(1, (BlockRedstoneEvent) args);
-
+		
 		if (is == InputState.HIGH && !lastState) {
 			if (risingPulse) pulse();
+			lastState = true;
 		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
 			if (fallingPulse) pulse();
+			lastState = false;
 		} else {
 			return;
 		}
@@ -86,12 +88,15 @@ public class PulseSign extends PSSign {
 		String edgeLine = this.getLines(event)[1].trim();
 		
 		if (edgeLine.equals("")) {
-			edgeLine = "RISING";
+			edgeLine = "BOTH";
 		}
 		
 		if (edgeLine.equalsIgnoreCase("RISING")) {
 			risingPulse = true;
 		} else if (edgeLine.equalsIgnoreCase("FALLING")) {
+			fallingPulse = true;
+		} else if (edgeLine.equalsIgnoreCase("BOTH")) {
+			risingPulse = true;
 			fallingPulse = true;
 		} else {
 			if (!reload) {

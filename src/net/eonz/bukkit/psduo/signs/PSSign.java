@@ -630,6 +630,9 @@ public abstract class PSSign {
 		case TOGGLE:
 			newSign = new ToggleSign();
 			break;
+		case PULSE:
+			newSign = new PulseSign();
+			break;
 		case SEND:
 			newSign = new SendSign();
 			break;

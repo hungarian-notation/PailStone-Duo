@@ -33,7 +33,7 @@ public enum SignType {
 	
 	RAND(true),
 	
-	LOGIC(true), DELAY(true), TOGGLE(true), 
+	LOGIC(true), DELAY(true), TOGGLE(true), PULSE(true),
 	
 	SEND(true), RECV(true), TRIGGER(true), CLICK(true),
 	
