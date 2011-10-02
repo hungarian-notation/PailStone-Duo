@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PailConfigFile {
 
@@ -107,6 +108,17 @@ public class PailConfigFile {
 		String val = this.getString(key, Boolean.toString(defaultValue));
 		return Boolean.parseBoolean(val);
 	}
+        
+        public List<Integer> getIntegerList(String key, List<Integer> defaultValue) {
+            String valString = this.getString(key, "");
+            if (valString == null) return defaultValue;
+            List<Integer> val = new ArrayList<Integer>();
+            String[] split = valString.replaceAll(" ", "").split(",");
+            for (String s : split) {
+                val.add(new Integer(s));
+            }
+            return val;
+        }
 
 	public int getInt(String key, int defaultValue) {
 		String val = this.getString(key, Integer.toString(defaultValue));

@@ -200,6 +200,15 @@ public class CuboidSign extends PSSign {
 
 		lmat = matLow;
 		hmat = matHigh;
+                
+                // Check if block is allowed:
+                if ((main.useWhiteList ? (!main.blockList.contains(lmat) || !main.blockList.contains(hmat)) : (main.blockList.contains(lmat) || main.blockList.contains(hmat))) && !main.hasPermission(this.getOwner(), "blocklist", main.getServer().getPlayer(this.getOwnerName()).getWorld().getName())) {
+                    main.alert(this.getOwnerName(), "You are not allowed to use that block value.");
+                    if (!reload) {
+                        event.setCancelled(true);
+                    }
+                    return;
+                }
 
 		matLine = "" + matHigh + ":" + hdat + " " + matLow + ":" + ldat;
 
