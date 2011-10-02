@@ -16,8 +16,7 @@ public class NijikokunPermissionsModule implements PermissionsInterface {
 	
 	@Override
 	public boolean has(Player player, String permission, String world) {
-		String fullPermission = pluginName + '.' + permission;
-		return handler.has(world, player.getName(), fullPermission);
+		return handler.has(world, player.getName(), permission);
 	}
 	
 	@Override

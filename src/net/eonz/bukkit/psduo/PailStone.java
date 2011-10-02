@@ -272,7 +272,7 @@ public class PailStone extends JavaPlugin {
 	}
 
 	public boolean hasPermission(Player p, String permission, String world) {
-		return this.permissionHandler.has(p, permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
+		return this.permissionHandler.has(p, "pailstone." + permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
 	}
 
 	public boolean inGroup(Player p, String world, String group) {

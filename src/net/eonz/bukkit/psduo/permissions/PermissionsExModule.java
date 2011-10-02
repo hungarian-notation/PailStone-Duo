@@ -39,8 +39,7 @@ public class PermissionsExModule implements PermissionsInterface {
 	}
 	
 	public boolean has(Player player, String permission, String world) {
-		String fullPermission = pluginName + '.' + permission;
-		return permissions.has(player, fullPermission, world);
+		return permissions.has(player, permission, world);
 	}
 	
 	public boolean inGroup(Player player, String group, String world) {
