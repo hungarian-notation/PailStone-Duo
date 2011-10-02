@@ -65,7 +65,7 @@ public abstract class PSSign {
 		this.leverLocation = Direction.shift(l, Direction.opposite(facing), 2);
 
 		this.main.sgc.trigger(TriggerType.CLEAR, l);
-		
+
 		this.setData(data);
 		this.declare(reload, event);
 		this.main.sgc.register(this, TriggerType.PING);
@@ -347,7 +347,7 @@ public abstract class PSSign {
 	// ADMIN FUNCTIONS
 
 	private boolean internallyInvalidated = false;
-	
+
 	/**
 	 * Checks to see if the sign is still valid. Returns ValidationState.UNKNOWN
 	 * if the sign's chunk is unloaded.
@@ -355,10 +355,11 @@ public abstract class PSSign {
 	public ValidationState isValid() {
 		// Check if chunk is loaded
 
-		if (internallyInvalidated) return ValidationState.INVALID;
-		
+		if (internallyInvalidated)
+			return ValidationState.INVALID;
+
 		if (this.isLoaded()) {
-			
+
 			// Chunk loaded, check if its a wall sign.
 			Block myBlock = this.getBlock();
 
@@ -375,15 +376,14 @@ public abstract class PSSign {
 						matches = false;
 						if ((!plines[i].trim().equals("")) && plines[i] != null)
 							hasText = true;
-						 System.out.println(i + ": " + safeLines[i] + " vs " +
-						 plines[i]);
+						System.out.println(i + ": " + safeLines[i] + " vs " + plines[i]);
 						break;
 					}
 				}
 				if (matches) {
 					return ValidationState.VALID;
 				} else {
-					if (hasText) 
+					if (hasText)
 						return ValidationState.INVALID;
 					return ValidationState.BLANK;
 				}
@@ -405,7 +405,7 @@ public abstract class PSSign {
 		 * The sign is blank.
 		 */
 		BLANK,
-		
+
 		/**
 		 * The sign is invalid.
 		 */
@@ -444,16 +444,14 @@ public abstract class PSSign {
 		// Ping is a meta-event that is only used to force validation of all
 		// signs.
 		if (type == TriggerType.PING) {
-			
+
 			return;
 		}
-		 
+
 		if (type == TriggerType.CLEAR) {
-			if (this.getLocation().equals((Location)args)) {
-				System.out.println("Got a valid clear message...");
+			if (this.getLocation().equals((Location) args)) {
+				this.main.c("A sign was placed in the location of an older sign. The older sign has been invalidated.");
 				this.internallyInvalidated = true;
-			} else {
-				System.out.println("Got an invalid clear message: " + args + " and mine is " + this.location);
 			}
 			return;
 		}
@@ -504,13 +502,15 @@ public abstract class PSSign {
 	 * @param args
 	 */
 	protected abstract void triggersign(TriggerType type, Object args);
-	
+
 	protected void startTicking() {
 		this.main.tickctrl.register(this);
 	}
-	
+
 	/**
-	 * Called each tick after sign is registered with PSTickControl untill this method returns true.
+	 * Called each tick after sign is registered with PSTickControl untill this
+	 * method returns true.
+	 * 
 	 * @return
 	 */
 	public boolean tick() {
@@ -565,7 +565,7 @@ public abstract class PSSign {
 	public boolean equals(Object o) {
 		return (o instanceof PSSign && o == this);
 	}
-	
+
 	/**
 	 * This is where the new sign data will be converted into an object of the
 	 * sign class.

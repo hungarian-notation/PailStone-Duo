@@ -111,7 +111,7 @@ public class PailConfigFile {
 
 	public List<Integer> getIntegerList(String key, List<Integer> defaultValue) {
 		String valString = this.getString(key, "");
-		if (valString == null)
+		if (valString == null || valString.equals(""))
 			return defaultValue;
 		List<Integer> val = new ArrayList<Integer>();
 		String[] split = valString.replaceAll(" ", "").split(",");
