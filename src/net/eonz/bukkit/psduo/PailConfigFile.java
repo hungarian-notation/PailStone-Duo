@@ -12,23 +12,23 @@ import java.util.List;
 public class PailConfigFile {
 
 	private final PailStone main;
-	
+
 	private File cfg;
-	
+
 	ArrayList<PCfgKey> keys = new ArrayList<PCfgKey>();
-	
+
 	public PailConfigFile(PailStone main, File cfg) {
 		this.main = main;
 		this.cfg = cfg;
 	}
-	
+
 	public void load() {
 		keys.clear();
-		
+
 		if (cfg.isDirectory()) {
 			cfg = new File(cfg.getAbsolutePath() + "config.txt");
 		}
-		
+
 		if (!cfg.exists()) {
 			try {
 				cfg.createNewFile();
@@ -57,7 +57,7 @@ public class PailConfigFile {
 			}
 		}
 	}
-	
+
 	public void save() {
 		boolean changes = false;
 		for (int i = 0; i < keys.size(); i++) {
@@ -83,14 +83,14 @@ public class PailConfigFile {
 			}
 		}
 	}
-	
+
 	public void announce() {
 		for (int i = 0; i < keys.size(); i++) {
 			PCfgKey k = keys.get(i);
 			this.main.c(k.getKey() + " is set to '" + k.getValue() + "'");
 		}
 	}
-	
+
 	public String getString(String key, String defaultValue) {
 		for (int i = 0; i < keys.size(); i++) {
 			PCfgKey k = keys.get(i);
@@ -103,55 +103,56 @@ public class PailConfigFile {
 		keys.add(nk);
 		return nk.getValue();
 	}
-	
+
 	public boolean getBoolean(String key, boolean defaultValue) {
 		String val = this.getString(key, Boolean.toString(defaultValue));
 		return Boolean.parseBoolean(val);
 	}
-        
-        public List<Integer> getIntegerList(String key, List<Integer> defaultValue) {
-            String valString = this.getString(key, "");
-            if (valString == null) return defaultValue;
-            List<Integer> val = new ArrayList<Integer>();
-            String[] split = valString.replaceAll(" ", "").split(",");
-            for (String s : split) {
-                val.add(new Integer(s));
-            }
-            return val;
-        }
+
+	public List<Integer> getIntegerList(String key, List<Integer> defaultValue) {
+		String valString = this.getString(key, "");
+		if (valString == null)
+			return defaultValue;
+		List<Integer> val = new ArrayList<Integer>();
+		String[] split = valString.replaceAll(" ", "").split(",");
+		for (String s : split) {
+			val.add(new Integer(s));
+		}
+		return val;
+	}
 
 	public int getInt(String key, int defaultValue) {
 		String val = this.getString(key, Integer.toString(defaultValue));
 		return Integer.parseInt(val);
 	}
-	
+
 	private static class PCfgKey {
 		private final String key;
 		private String value;
-		
+
 		private boolean changed;
-		
+
 		public PCfgKey(String key, String value) {
 			this.key = key;
 			this.value = value;
 			changed = false;
 		}
-		
+
 		public void dirty() {
 			changed = true;
 		}
-		
+
 		public String getValue() {
 			return value;
 		}
-		
+
 		public String getKey() {
 			return key;
 		}
-		
+
 		public boolean isChanged() {
 			return changed;
 		}
 	}
-	
+
 }
