@@ -272,6 +272,7 @@ public class PailStone extends JavaPlugin {
 	}
 
 	public boolean hasPermission(Player p, String permission, String world) {
+		// Have to check all three due to a peculiarity in bukkit's built-in permissions.
 		return this.permissionHandler.has(p, "pailstone." + permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
 	}
 

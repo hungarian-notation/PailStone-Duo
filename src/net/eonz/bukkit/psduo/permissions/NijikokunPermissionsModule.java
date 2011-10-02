@@ -8,10 +8,8 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class NijikokunPermissionsModule implements PermissionsInterface {
 
 	private final PermissionHandler handler;
-	private final String pluginName;
 	public NijikokunPermissionsModule(Permissions permissions, String pluginName) {
 		handler = permissions.getHandler();
-		this.pluginName = pluginName;
 	}
 	
 	@Override
