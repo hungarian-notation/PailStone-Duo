@@ -35,8 +35,7 @@ public class BukkitPermissionsModule implements PermissionsInterface {
 	}
  
 	public boolean has(Player player, String permission, String world) {
-		String fullPermission = pluginName + '.' + permission;
-		return player.hasPermission(fullPermission);
+		return player.hasPermission(permission);
 	}
 
 	public boolean inGroup(Player player, String group, String world) {

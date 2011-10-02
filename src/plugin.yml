@@ -64,3 +64,5 @@ permissions:
         default: op
     pailstone.bolt:
         default: op
+    pailstone.blocklist:
+        default: op

@@ -25,6 +25,8 @@ package net.eonz.bukkit.psduo;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +83,8 @@ public class PailStone extends JavaPlugin {
 
 	public boolean cfgWipeProtection;
 	public int cfgMaxCuboid;
+        public List<Integer> blockList;
+        public boolean useWhiteList;
 
 	// END CONFIG --------------
 
@@ -104,6 +108,8 @@ public class PailStone extends JavaPlugin {
 
 		cfgWipeProtection = cfg.getBoolean("wipe-protection", true);
 		cfgMaxCuboid = cfg.getInt("max-cuboid-area", 400);
+                blockList = cfg.getIntegerList("block-blacklist", new ArrayList<Integer>());
+                useWhiteList = cfg.getBoolean("use-blacklist-as-whitelist", false);
 
 		cfg.announce();
 
@@ -266,7 +272,7 @@ public class PailStone extends JavaPlugin {
 	}
 
 	public boolean hasPermission(Player p, String permission, String world) {
-		return this.permissionHandler.has(p, permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
+		return this.permissionHandler.has(p, "pailstone." + permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
 	}
 
 	public boolean inGroup(Player p, String world, String group) {
