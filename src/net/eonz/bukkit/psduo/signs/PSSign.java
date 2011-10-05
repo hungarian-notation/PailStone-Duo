@@ -502,15 +502,13 @@ public abstract class PSSign {
 	 * @param args
 	 */
 	protected abstract void triggersign(TriggerType type, Object args);
-
+	
 	protected void startTicking() {
 		this.main.tickctrl.register(this);
 	}
-
+	
 	/**
-	 * Called each tick after sign is registered with PSTickControl untill this
-	 * method returns true.
-	 * 
+	 * Called each tick after sign is registered with PSTickControl until this method returns true.
 	 * @return
 	 */
 	public boolean tick() {
