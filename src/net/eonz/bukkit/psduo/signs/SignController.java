@@ -46,7 +46,7 @@ public class SignController {
 	 * events to the proper signs. Signs call the register method from their
 	 * constructors to signify that they want to listen for a specific trigger.
 	 * The invalidate command can be called when a sign is broken or proven
-	 * invalid to completly dereference the sign.
+	 * invalid to completely dereference the sign.
 	 * 
 	 * What does this need to do?
 	 */
@@ -128,18 +128,11 @@ public class SignController {
 			load = new BufferedReader(new FileReader(PailStone.dataPath + signFile));
 		} catch (FileNotFoundException e) {
 			main.c("No sign data file found.");
-			if (load != null) {
-				try {
-					load.close();
-				} catch (IOException e1) {
-				}
-			}
 			return;
 		}
 
 		String line;
 		try {
-			int lineNum = 1;
 			line = load.readLine();
 
 			if (line == null) {
@@ -150,7 +143,6 @@ public class SignController {
 			if (line.equals("PAILSTONE-3")) {
 				// ORIGINAL SAVE FORMAT
 				while ((line = load.readLine()) != null) {
-					lineNum++;
 					String[] params = decombinate(line, '\u001F');
 					if (params.length >= 11) {
 
