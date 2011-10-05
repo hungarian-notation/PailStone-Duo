@@ -24,56 +24,91 @@ package net.eonz.bukkit.psduo;
  * language governing rights and limitations under the Licenses. 
  */
 
+import java.util.ArrayList;
+
+import net.eonz.bukkit.psduo.signs.PSSign;
+
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.SignChangeEvent;
 
 public class PSCommand implements CommandExecutor {
 
-	private final PailStone main;
+  private final PailStone main;
 
-	public PSCommand(PailStone pailStone) {
-		this.main = pailStone;
-	}
+  public PSCommand(PailStone pailStone) {
+    this.main = pailStone;
+  }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+  @Override
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if (args.length > 0) {
-			if (args[0].equalsIgnoreCase("msg") && sender instanceof Player) {
-				Player p = (Player) sender;
+    if (args.length > 0) {
+      if (args[0].equalsIgnoreCase("msg") && sender instanceof Player) {
+        Player p = (Player) sender;
 
-				if (args.length > 1) {
-					String newMsg = combine(args, 1);
-					this.main.alert(p.getName(), "Saved: \"" + newMsg + "\"");
-					PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
-					psp.setMessage(newMsg);
-					return true;
-				} else {
-					PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
-					if (psp.message != null) {
-						this.main.alert(p.getName(), "Stored message: \"" + psp.message + "\"");
-					} else {
-						this.main.alert(p.getName(), "You have not stored a message. " + org.bukkit.ChatColor.AQUA + "/ps msg <message>");
-					}
-					return true;
-				}
-			}
-		}
+        if (args.length > 1) {
+          String newMsg = combine(args, 1);
+          this.main.alert(p.getName(), "Saved: \"" + newMsg + "\"");
+          PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
+          psp.setMessage(newMsg);
+          return true;
+        } else {
+          PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
+          if (psp.message != null) {
+            this.main.alert(p.getName(), "Stored message: \"" + psp.message + "\"");
+          } else {
+            this.main.alert(p.getName(), "You have not stored a message. " + org.bukkit.ChatColor.AQUA + "/ps msg <message>");
+          }
+          return true;
+        }
+      }
+      if (args[0].equalsIgnoreCase("searchall") && sender instanceof Player) {
+        if (!main.hasPermission((Player) sender, "pailstone.recreate", ((Player)sender).getWorld().getName())){
+          sender.sendMessage("You do not have permission to run this command.");
+          return true;
+        }
+        sender.sendMessage("Searching for all currently loaded signs...");
+        Integer signCount = 0;
+        ArrayList<PSSign> allsigns = this.main.sgc.getAllSigns();
+        for (PSSign sign : allsigns){
+          if (sign.isLoaded()){
+            this.main.sgc.invalidate(sign, "Reloading sign");
+          }
+        }
+        for (World w : this.main.getServer().getWorlds()){
+          for (Chunk c : w.getLoadedChunks()){
+            for (BlockState b : c.getTileEntities()){
+              if (b.getBlock().getState() instanceof Sign){
+                SignChangeEvent event = new SignChangeEvent(b.getBlock(), (Player)sender, ((Sign)b).getLines());
+                this.main.getServer().getPluginManager().callEvent(event);
+                signCount++;
+              }
+            }
+          }
+        }
+        sender.sendMessage("Found "+signCount+" signs!");
+        return true;
+      }
+    }
+    return false;
+  }
 
-		return false;
-	}
-
-	public static String combine(String[] args, int from) {
-		String out = "";
-		for (int i = from; i < args.length; i++) {
-			if (i != from) {
-				out += " ";
-			}
-			out += args[i];
-		}
-		return out;
-	}
+  public static String combine(String[] args, int from) {
+    String out = "";
+    for (int i = from; i < args.length; i++) {
+      if (i != from) {
+        out += " ";
+      }
+      out += args[i];
+    }
+    return out;
+  }
 
 }
