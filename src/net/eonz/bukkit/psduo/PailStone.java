@@ -301,7 +301,6 @@ public class PailStone extends JavaPlugin {
 		ArrayList<String> lines = new ArrayList<String>();
 
 		int cursor = 0;
-		int actualLength = 0;
 
 		ChatColor last = ChatColor.GOLD;
 
@@ -311,11 +310,10 @@ public class PailStone extends JavaPlugin {
 				lines.add(message.substring(0, cursor).trim());
 				message = last + message.substring(cursor + 1).trim();
 				cursor = 0;
-				actualLength = 0;
 			} else if (next == '\u00A7') {
 				cursor += 2;
 				last = ChatColor.getByCode(Integer.parseInt("" + message.charAt(cursor - 1), 16));
-			} else if (cursor == lineLength) {
+			} else if (cursor >= lineLength) {
 				while (message.charAt(cursor) != ' ') {
 					cursor--;
 					if (cursor < 0) {
@@ -326,10 +324,8 @@ public class PailStone extends JavaPlugin {
 				lines.add(message.substring(0, cursor).trim());
 				message = last + message.substring(cursor).trim();
 				cursor = 0;
-				actualLength = 0;
 			} else {
 				cursor++;
-				actualLength++;
 			}
 		}
 
