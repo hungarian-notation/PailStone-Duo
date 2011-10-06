@@ -156,7 +156,10 @@ public class PailStone extends JavaPlugin {
 
 	public static void alert(CommandSender sender, String message) {
 		if (sender instanceof Player) {
-			sender.sendMessage(ChatColor.GOLD + "[PailStone] " + message);
+			message = ChatColor.GOLD + "[PailStone] " + message;
+			for (String line : wrap(message, 54)) {
+				sender.sendMessage(line);
+			}
 		} else {
 			sender.sendMessage("[PS] " + message);
 		}
@@ -166,7 +169,10 @@ public class PailStone extends JavaPlugin {
 	public boolean alert(String playerName, String message) {
 		Player p = this.getServer().getPlayer(playerName);
 		if (p != null && p.isOnline()) {
-			p.sendMessage(ChatColor.GOLD + "[PailStone] " + message);
+			message = ChatColor.GOLD + "[PailStone] " + message;
+			for (String line : wrap(message, 54)) {
+				p.sendMessage(line);
+			}
 			return true;
 		}
 		return false;
@@ -291,4 +297,44 @@ public class PailStone extends JavaPlugin {
 		return this.permissionHandler.inGroup(p, group, world);
 	}
 
+	public static String[] wrap(String message, int lineLength) {
+		ArrayList<String> lines = new ArrayList<String>();
+
+		int cursor = 0;
+		int actualLength = 0;
+
+		ChatColor last = ChatColor.GOLD;
+
+		while (cursor < message.length() && message.length() >= 0) {
+			char next = message.charAt(cursor);
+			if (next == '\n') {
+				lines.add(message.substring(0, cursor).trim());
+				message = last + message.substring(cursor + 1).trim();
+				cursor = 0;
+				actualLength = 0;
+			} else if (next == '\u00A7') {
+				cursor += 2;
+				last = ChatColor.getByCode(Integer.parseInt("" + message.charAt(cursor - 1), 16));
+			} else if (cursor == lineLength) {
+				while (message.charAt(cursor) != ' ') {
+					cursor--;
+					if (cursor < 0) {
+						cursor = lineLength - 1;
+						break;
+					}
+				}
+				lines.add(message.substring(0, cursor).trim());
+				message = last + message.substring(cursor).trim();
+				cursor = 0;
+				actualLength = 0;
+			} else {
+				cursor++;
+				actualLength++;
+			}
+		}
+
+		lines.add(message.trim());
+
+		return lines.toArray(new String[0]);
+	}
 }
