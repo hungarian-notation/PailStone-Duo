@@ -25,24 +25,29 @@ package net.eonz.bukkit.psduo;
  */
 
 import net.eonz.bukkit.psduo.signs.SignType;
-
 import org.bukkit.ChatColor;
+import java.util.ArrayList;
+import net.eonz.bukkit.psduo.signs.PSSign;
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.SignChangeEvent;
 
 public class PSCommand implements CommandExecutor {
 
-	private final PailStone main;
+  private final PailStone main;
 
-	public PSCommand(PailStone pailStone) {
-		this.main = pailStone;
-	}
+  public PSCommand(PailStone pailStone) {
+    this.main = pailStone;
+  }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+  @Override
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase("msg") && isPlayer(sender)) {
 				setMessage(sender, command, label, args);
@@ -53,6 +58,11 @@ public class PSCommand implements CommandExecutor {
 				listSigns(sender, command, label, args);
 				return true;
 			}
+			
+      if (args[0].equalsIgnoreCase("reloadsigns")) {
+        reloadSigns(sender, command, label, args);
+        return true;
+      }
 		}
 
 		sender.sendMessage("Malformed command.");
@@ -86,6 +96,41 @@ public class PSCommand implements CommandExecutor {
 		}
 	}
 
+  /**
+   * Reloads signs in given world or all worlds, re-creating them as the given player if they do not exist already.
+   * 
+   * @param sender
+   * @param command
+   * @param label
+   * @param args
+   */
+  public void reloadSigns(CommandSender sender, Command command, String label, String[] args){
+    if (!main.hasPermission((Player) sender, "pailstone.recreate", ((Player)sender).getWorld().getName())){
+      sender.sendMessage("You do not have permission to run this command.");
+      return;
+    }
+    sender.sendMessage("Searching for all currently loaded signs...");
+    Integer signCount = 0;
+    ArrayList<PSSign> allsigns = this.main.sgc.getAllSigns();
+    for (PSSign sign : allsigns){
+      if (sign.isLoaded()){
+        this.main.sgc.invalidate(sign, "Reloading sign");
+      }
+    }
+    for (World w : this.main.getServer().getWorlds()){
+      for (Chunk c : w.getLoadedChunks()){
+        for (BlockState b : c.getTileEntities()){
+          if (b.getBlock().getState() instanceof Sign){
+            SignChangeEvent event = new SignChangeEvent(b.getBlock(), (Player)sender, ((Sign)b).getLines());
+            this.main.getServer().getPluginManager().callEvent(event);
+            signCount++;
+          }
+        }
+      }
+    }
+    sender.sendMessage("Found "+signCount+" signs!");
+  }
+	
 	/**
 	 * Parse the listsigns command.
 	 * 
@@ -155,15 +200,15 @@ public class PSCommand implements CommandExecutor {
 		}
 	}
 
-	public static String combine(String[] args, int from) {
-		String out = "";
-		for (int i = from; i < args.length; i++) {
-			if (i != from) {
-				out += " ";
-			}
-			out += args[i];
-		}
-		return out;
-	}
+  public static String combine(String[] args, int from) {
+    String out = "";
+    for (int i = from; i < args.length; i++) {
+      if (i != from) {
+        out += " ";
+      }
+      out += args[i];
+    }
+    return out;
+  }
 
 }

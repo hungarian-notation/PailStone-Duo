@@ -269,7 +269,7 @@ public class SignController {
 	 * 
 	 * @return
 	 */
-	private ArrayList<PSSign> getAllSigns() {
+	public ArrayList<PSSign> getAllSigns() {
 		ArrayList<PSSign> all = new ArrayList<PSSign>();
 
 		ArrayList<PSSign> gsigns;
