@@ -52,12 +52,29 @@ public class TriggerSign extends PSSign {
 					}
 				}
 			}
-		} 
+		}
 
 		if (this.isLoaded()) {
 			this.setOutput(state);
+			if (state){
+        if (trigtype.equalsIgnoreCase("pulse")){
+          countdown = 10;
+          this.startTicking();
+        }
+      }
 		}
 	}
+
+  public boolean tick() {
+    countdown--;
+    if (countdown < 1){
+      state = false;
+      this.setOutput(state);
+      return false;
+    }else{
+      return true;
+    }
+  }
 
 	public String getData() {
 		if (state) {
@@ -76,7 +93,8 @@ public class TriggerSign extends PSSign {
 	}
 
 	boolean state = false;
-	String command, player;
+	int countdown;
+	String command, player, trigtype;
 
 	protected void declare(boolean reload, SignChangeEvent event) {
 
@@ -84,6 +102,7 @@ public class TriggerSign extends PSSign {
 
 		command = this.getLines(event)[1].replace("/", "");
 		player = this.getLines(event)[2];
+		trigtype = this.getLines(event)[3];
 
 		if (player == null || player.equals("")) {
 			player = "@";
@@ -99,17 +118,24 @@ public class TriggerSign extends PSSign {
 				this.init("Trigger identifier defaulted to \"NULL\" because you did not specify your own.");
 		}
 
+
 		if (!reload) {
 			this.clearArgLines(event);
 			this.setLine(1, command, event);
 			this.setLine(2, player, event);
+      this.setLine(3, trigtype, event);
 		}
 
 		main.sgc.register(this, TriggerType.TRIGGER_COMMAND);
 		main.sgc.register(this, TriggerType.TIMER_SECOND);
 
-		if (!reload)
-			this.init("Trigger sign accepted.");
+		if (!reload){
+      if (trigtype.equalsIgnoreCase("pulse")){
+        this.init("Trigger pulse sign accepted.");
+      }else{
+        this.init("Trigger toggle sign accepted.");
+      }
+    }
 
 	}
 
