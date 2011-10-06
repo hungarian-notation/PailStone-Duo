@@ -120,9 +120,11 @@ public class DelaySign extends PSSign {
 			this.init("Delay sign accepted.");
 		}
 
+    lastState = (this.getInput(1) == InputState.HIGH);
+    this.setOutput(lastState);
 		states = new boolean[period];
 		for (int i = 0; i < states.length; i++) {
-			states[i] = false;
+			states[i] = lastState;
 		}
 	}
 
