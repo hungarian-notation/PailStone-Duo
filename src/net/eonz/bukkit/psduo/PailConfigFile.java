@@ -46,7 +46,7 @@ public class PailConfigFile {
 						if (line.contains("=")) {
 							String[] args = line.split("=");
 							String key = args[0].trim();
-							String value = args[1].trim();
+							String value = (args.length >= 2)?args[1].trim():"";
 							keys.add(new PCfgKey(key, value));
 						}
 					}
