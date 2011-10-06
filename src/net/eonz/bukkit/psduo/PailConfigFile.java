@@ -46,7 +46,7 @@ public class PailConfigFile {
 						if (line.contains("=")) {
 							String[] args = line.split("=");
 							String key = args[0].trim();
-							String value = (args.length >= 2)?args[1].trim():"";
+							String value = (args.length >= 2) ? args[1].trim() : "";
 							keys.add(new PCfgKey(key, value));
 						}
 					}
@@ -106,24 +106,44 @@ public class PailConfigFile {
 
 	public boolean getBoolean(String key, boolean defaultValue) {
 		String val = this.getString(key, Boolean.toString(defaultValue));
+		// Requires no checking. parseBoolean returns false on faulty input.
 		return Boolean.parseBoolean(val);
 	}
 
 	public List<Integer> getIntegerList(String key, List<Integer> defaultValue) {
-		String valString = this.getString(key, "");
+		String defaultList = "";
+		for (int i = 0; i < defaultValue.size(); i++) {
+			if (i != 0)
+				defaultList += ",";
+			defaultList += defaultValue.get(i);
+		}
+
+		String valString = this.getString(key, defaultList);
+
 		if (valString == null || valString.equals(""))
 			return defaultValue;
 		List<Integer> val = new ArrayList<Integer>();
 		String[] split = valString.replaceAll(" ", "").split(",");
 		for (String s : split) {
-			val.add(new Integer(s));
+			try {
+				Integer nextVal = new Integer(s);
+				val.add(nextVal);
+			} catch (NumberFormatException e) {
+				main.e("Found \"" + s + "\" as an item in " + key + ". " + key + " is required to be a list of integers.");
+				continue;
+			}
 		}
 		return val;
 	}
 
 	public int getInt(String key, int defaultValue) {
 		String val = this.getString(key, Integer.toString(defaultValue));
-		return Integer.parseInt(val);
+		try {
+			return Integer.parseInt(val);
+		} catch (NumberFormatException e) {
+			main.e("Found \"" + val + "\" as the value of " + key + ". " + key + " is required to be an integer.");
+			return defaultValue;
+		}
 	}
 
 	private static class PCfgKey {
