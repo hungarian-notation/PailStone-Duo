@@ -42,6 +42,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -83,8 +84,8 @@ public class PailStone extends JavaPlugin {
 
 	public boolean cfgWipeProtection;
 	public int cfgMaxCuboid;
-        public List<Integer> blockList;
-        public boolean useWhiteList;
+	public List<Integer> blockList;
+	public boolean useWhiteList;
 
 	// END CONFIG --------------
 
@@ -108,8 +109,8 @@ public class PailStone extends JavaPlugin {
 
 		cfgWipeProtection = cfg.getBoolean("wipe-protection", true);
 		cfgMaxCuboid = cfg.getInt("max-cuboid-area", 400);
-                blockList = cfg.getIntegerList("block-blacklist", new ArrayList<Integer>());
-                useWhiteList = cfg.getBoolean("use-blacklist-as-whitelist", false);
+		blockList = cfg.getIntegerList("block-blacklist", new ArrayList<Integer>());
+		useWhiteList = cfg.getBoolean("use-blacklist-as-whitelist", false);
 
 		cfg.announce();
 
@@ -153,6 +154,15 @@ public class PailStone extends JavaPlugin {
 		c("[*DEBUG*] " + message);
 	}
 
+	public static void alert(CommandSender sender, String message) {
+		if (sender instanceof Player) {
+			sender.sendMessage(ChatColor.GOLD + "[PailStone] " + message);
+		} else {
+			sender.sendMessage("[PS] " + message);
+		}
+	}
+
+	// Not going to deprecate this, but avoid if possible.
 	public boolean alert(String playerName, String message) {
 		Player p = this.getServer().getPlayer(playerName);
 		if (p != null && p.isOnline()) {
@@ -272,7 +282,8 @@ public class PailStone extends JavaPlugin {
 	}
 
 	public boolean hasPermission(Player p, String permission, String world) {
-		// Have to check all three due to a peculiarity in bukkit's built-in permissions.
+		// Have to check all three due to a peculiarity in bukkit's built-in
+		// permissions.
 		return this.permissionHandler.has(p, "pailstone." + permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
 	}
 

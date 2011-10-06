@@ -24,6 +24,9 @@ package net.eonz.bukkit.psduo;
  * language governing rights and limitations under the Licenses. 
  */
 
+import net.eonz.bukkit.psduo.signs.SignType;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,28 +44,115 @@ public class PSCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (args.length > 0) {
-			if (args[0].equalsIgnoreCase("msg") && sender instanceof Player) {
-				Player p = (Player) sender;
+			if (args[0].equalsIgnoreCase("msg") && isPlayer(sender)) {
+				setMessage(sender, command, label, args);
+				return true;
+			}
 
-				if (args.length > 1) {
-					String newMsg = combine(args, 1);
-					this.main.alert(p.getName(), "Saved: \"" + newMsg + "\"");
-					PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
-					psp.setMessage(newMsg);
-					return true;
-				} else {
-					PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
-					if (psp.message != null) {
-						this.main.alert(p.getName(), "Stored message: \"" + psp.message + "\"");
-					} else {
-						this.main.alert(p.getName(), "You have not stored a message. " + org.bukkit.ChatColor.AQUA + "/ps msg <message>");
-					}
-					return true;
-				}
+			if (args[0].equalsIgnoreCase("listsigns")) {
+				listSigns(sender, command, label, args);
+				return true;
 			}
 		}
 
-		return false;
+		sender.sendMessage("Malformed command.");
+
+		return true;
+	}
+
+	/**
+	 * Sets the player's message for announce, disp, etc.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void setMessage(CommandSender sender, Command command, String label, String[] args) {
+		Player p = (Player) sender;
+
+		if (args.length > 1) {
+			String newMsg = combine(args, 1);
+			PailStone.alert(p, "Saved: \"" + newMsg + "\"");
+			PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
+			psp.setMessage(newMsg);
+		} else {
+			PSPlayer psp = this.main.players.safelyGet(p.getName(), this.main);
+			if (psp.message != null) {
+				PailStone.alert(p, "Stored message: \"" + psp.message + "\"");
+			} else {
+				PailStone.alert(p, "You have not stored a message. " + org.bukkit.ChatColor.AQUA + "/ps msg <message>");
+			}
+		}
+	}
+
+	/**
+	 * Parse the listsigns command.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 */
+	private void listSigns(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length >= 2) {
+			Player p = main.getServer().getPlayer(args[1]);
+			if (p != null) {
+				if (args.length >= 3) {
+					if (main.getServer().getWorld(args[2]) != null) {
+						listSigns(p, sender, args[2]);
+					} else {
+						PailStone.alert(sender, "There is no \"" + args[2] + "\".");
+					}
+				} else {
+					listSigns(p, sender, null);
+				}
+			} else {
+				PailStone.alert(sender, args[1] + " could not be found.");
+				PailStone.alert(sender, "Please note that " + args[1] + " must be logged in for this command to work.");
+			}
+		} else if (sender instanceof Player) {
+			listSigns((Player) sender, sender, null);
+		} else {
+			PailStone.alert(sender, "This command must be called by or on a player.");
+		}
+	}
+
+	/**
+	 * List what signs 'p' can use on 'world' to 'sender'.
+	 * 
+	 * @param p
+	 * @param sender
+	 * @param world
+	 */
+	private void listSigns(Player p, CommandSender sender, String world) {
+		String message = p.getName() + " can use: " + ChatColor.WHITE;
+
+		String actualWorld = ((world == null) ? p.getWorld().getName() : world);
+
+		for (SignType sign : SignType.values()) {
+			if (main.hasPermission(p, sign.name().toLowerCase(), actualWorld)) {
+				message += sign.name() + " ";
+			}
+		}
+		message += ChatColor.GOLD + "on world \"" + actualWorld + "\".";
+		PailStone.alert(sender, message);
+	}
+
+	/**
+	 * Returns true if the sender is a player, sends a message to the sender and
+	 * returns false if not.
+	 * 
+	 * @param sender
+	 * @return
+	 */
+	public boolean isPlayer(CommandSender sender) {
+		if (sender instanceof Player) {
+			return true;
+		} else {
+			sender.sendMessage("This command can only be used by a player.");
+			return false;
+		}
 	}
 
 	public static String combine(String[] args, int from) {

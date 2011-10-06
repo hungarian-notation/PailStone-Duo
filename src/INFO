@@ -12,6 +12,7 @@ CHANGELOG
 	Added :pulse
 	Added block type blacklist to :cuboid
 	Various bug fixes
+	/ps listsigns [<player> [<world>]]
 	
 	(Thulinma and imjake9 contributing)
 
