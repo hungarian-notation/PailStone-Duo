@@ -1,12 +1,19 @@
 TODO
 
 	- Reload Signs
+	- Block Sensing IC
+	- Spout interface
+	- Spout-Achievment IC
 
 CHANGELOG
 
 3.7
 
 	Added :pulse
+	Added block type blacklist to :cuboid
+	Various bug fixes
+	
+	(Thulinma and imjake9 contributing)
 
 3.6
 
