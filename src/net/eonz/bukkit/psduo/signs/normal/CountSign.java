@@ -33,7 +33,8 @@ import net.eonz.bukkit.psduo.signs.TriggerType;
 public class CountSign extends PSSign {
 
 	private int count;
-	
+	private int lastAction = 0;
+
 	protected void triggersign(TriggerType type, Object args) {
 		BlockRedstoneEvent event = (BlockRedstoneEvent) args;
 		int input = this.getInputId(event);
@@ -41,14 +42,27 @@ public class CountSign extends PSSign {
 		if (event.getOldCurrent() == 0 && event.getNewCurrent() > 0) {
 			actions[input].applyAction(this, count);
 
-			if (count == countTo) {
+			if (count < 0) {
+				if (wrapDown && hasMod) {
+					this.setCount(mod - 1);
+				} else {
+					this.setCount(0);
+				}
+			}
+		
+			if (count == countTo || (count == 0 && countTo == mod && wrapDown)) {
 				this.setOutput(true);
 			} else {
 				this.setOutput(false);
 			}
 
-			if (hasMod && ((count - 1) % mod != (count - 1)))
+			if (!wrapDown && hasMod && ((count - 1) % mod != (count - 1)))
 				this.setCount(count % mod);
+
+			if (wrapDown) {
+				this.applyMod(mod);
+			}
+
 		}
 	}
 
@@ -115,6 +129,7 @@ public class CountSign extends PSSign {
 	private EdgeAction[] actions;
 	private int countTo, mod;
 	private boolean hasMod;
+	private boolean wrapDown;
 
 	protected void declare(boolean reload, SignChangeEvent event) {
 
@@ -141,7 +156,14 @@ public class CountSign extends PSSign {
 			}
 
 			if (boundArgs.length > 1) {
+				wrapDown = false;
+
 				try {
+					if (boundArgs[1].contains("*")) {
+						boundArgs[1] = boundArgs[1].replace("*", "");
+						wrapDown = true;
+					}
+
 					mod = Integer.parseInt(boundArgs[1]);
 					if (mod <= 0)
 						mod = 1;
@@ -195,6 +217,8 @@ public class CountSign extends PSSign {
 			String line1 = Integer.toString(countTo);
 			if (hasMod)
 				line1 += " " + Integer.toString(mod);
+			if (wrapDown && hasMod)
+				line1 += "*";
 			this.setLine(1, line1, event);
 			this.setLine(2, actions[0] + " " + actions[1] + " " + actions[2], event);
 			setCount(0, event);
@@ -207,6 +231,7 @@ public class CountSign extends PSSign {
 	}
 
 	protected void setCount(int c) {
+		lastAction = c - count;
 		setCount(c, null);
 	}
 
@@ -222,6 +247,10 @@ public class CountSign extends PSSign {
 		} catch (Exception error) {
 
 		}
+	}
+	
+	private void applyMod(int mod) {
+		this.count = this.count % mod;
 	}
 
 	private EdgeAction parseAction(String action) {
