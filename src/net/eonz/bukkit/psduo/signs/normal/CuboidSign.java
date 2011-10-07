@@ -28,15 +28,16 @@ import org.bukkit.Material;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
+import net.eonz.bukkit.psduo.CuboidUtil;
+import net.eonz.bukkit.psduo.CuboidUtil.CuboidType;
 import net.eonz.bukkit.psduo.PSPlayer;
-import net.eonz.bukkit.psduo.PailStone;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
 public class CuboidSign extends PSSign {
-	
+
 	protected void triggersign(TriggerType type, Object args) {
-		
+
 		int mat = lmat;
 		byte dat = ldat;
 
@@ -54,11 +55,7 @@ public class CuboidSign extends PSSign {
 				this.main.alert(this.getOwnerName(), "The cuboid you specified was " + csize + " blocks big. The maximum acceptable area is " + this.main.cfgMaxCuboid + " blocks.");
 				return;
 			} else {
-				if (dat != -1) {
-					PailStone.drawCuboid(mat, dat, this.getWorld(), x1, y1, z1, x2, y2, z2);
-				} else {
-					PailStone.drawCuboid(mat, this.getWorld(), x1, y1, z1, x2, y2, z2);
-				}
+				CuboidUtil.drawCuboid(mat, dat, this.getWorld(), x1, y1, z1, x2, y2, z2, t);
 			}
 		}
 	}
@@ -75,6 +72,7 @@ public class CuboidSign extends PSSign {
 	int x1, y1, z1, x2, y2, z2, lmat, hmat;
 	byte ldat, hdat;
 	boolean has_ldat, has_hdat;
+	CuboidType t;
 
 	protected void declare(boolean reload, SignChangeEvent event) {
 
@@ -197,20 +195,27 @@ public class CuboidSign extends PSSign {
 		} catch (Exception e) {
 			hdat = -1;
 		}
-
+		
 		lmat = matLow;
 		hmat = matHigh;
-                
-                // Check if block is allowed:
-                if ((main.useWhiteList ? (!main.blockList.contains(lmat) || !main.blockList.contains(hmat)) : (main.blockList.contains(lmat) || main.blockList.contains(hmat))) && !main.hasPermission(this.getOwner(), "blocklist", main.getServer().getPlayer(this.getOwnerName()).getWorld().getName())) {
-                    main.alert(this.getOwnerName(), "You are not allowed to use that block value.");
-                    if (!reload) {
-                        event.setCancelled(true);
-                    }
-                    return;
-                }
 
-		matLine = "" + matHigh + ":" + hdat + " " + matLow + ":" + ldat;
+		// Check if block is allowed:
+		if ((main.useWhiteList ? (!main.blockList.contains(lmat) || !main.blockList.contains(hmat)) : (main.blockList.contains(lmat) || main.blockList.contains(hmat))) && !main.hasPermission(this.getOwner(), "blocklist", main.getServer().getPlayer(this.getOwnerName()).getWorld().getName())) {
+			main.alert(this.getOwnerName(), "You are not allowed to use that block value.");
+			if (!reload) {
+				event.setCancelled(true);
+			}
+			return;
+		}
+		
+		t = CuboidType.CUBOID;
+		
+		if (matArgs.length >= 3 && matArgs[2].trim().length() >= 1) {
+			CuboidType proposedType = CuboidType.fromId(matArgs[2].trim().charAt(0));
+			if (proposedType != null) t = proposedType;
+		}
+
+		matLine = "" + matHigh + ":" + hdat + " " + matLow + ":" + ldat + " " + t.ID;
 
 		if (!reload) {
 			this.setLine(3, matLine, event);

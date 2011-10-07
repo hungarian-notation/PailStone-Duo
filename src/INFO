@@ -4,11 +4,13 @@ TODO
 	- Block Sensing IC
 	- Spout interface
 	- Spout-Achievment IC
+	- Standardize pulse code, perhaps pull it all into PSSign and make a private pulse method?
 
 CHANGELOG
 
 3.7
 
+	Added shape args to :cuboid, added ellipsoid cuboid shape.
 	Added :pulse
 	Added block type blacklist to :cuboid
 	Various bug fixes

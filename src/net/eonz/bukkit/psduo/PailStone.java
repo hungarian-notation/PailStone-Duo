@@ -37,11 +37,9 @@ import net.eonz.bukkit.psduo.signs.SignController;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -195,90 +193,6 @@ public class PailStone extends JavaPlugin {
 			}
 		}
 		return newLines;
-	}
-
-	/**
-	 * Utility for drawing cuboids.
-	 * 
-	 * @param materialID
-	 * @param world
-	 * @param x1
-	 * @param y1
-	 * @param z1
-	 * @param x2
-	 * @param y2
-	 * @param z2
-	 */
-	public static void drawCuboid(int materialID, World world, int x1, int y1, int z1, int x2, int y2, int z2) {
-		if (x1 > x2) {
-			int x3 = x1;
-			x1 = x2;
-			x2 = x3;
-		}
-		if (y1 > y2) {
-			int y3 = y1;
-			y1 = y2;
-			y2 = y3;
-		}
-		if (z1 > z2) {
-			int z3 = z1;
-			z1 = z2;
-			z2 = z3;
-		}
-		for (int x = x1; x <= x2; x++) {
-			for (int y = y1; y <= y2; y++) {
-				for (int z = z1; z <= z2; z++) {
-					if (world.getBlockAt(x, y, z).getTypeId() != materialID) {
-						world.getBlockAt(x, y, z).setTypeId(materialID);
-						// PailStone.server.getWorld(world).getBlockAt(x, y, z)
-						// .getState().update();
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Utility for drawing cuboids.
-	 * 
-	 * @param materialID
-	 * @param data
-	 * @param world
-	 * @param x1
-	 * @param y1
-	 * @param z1
-	 * @param x2
-	 * @param y2
-	 * @param z2
-	 */
-	public static void drawCuboid(int materialID, byte data, World world, int x1, int y1, int z1, int x2, int y2, int z2) {
-		if (x1 > x2) {
-			int x3 = x1;
-			x1 = x2;
-			x2 = x3;
-		}
-		if (y1 > y2) {
-			int y3 = y1;
-			y1 = y2;
-			y2 = y3;
-		}
-		if (z1 > z2) {
-			int z3 = z1;
-			z1 = z2;
-			z2 = z3;
-		}
-		Block b;
-		for (int x = x1; x <= x2; x++) {
-			for (int y = y1; y <= y2; y++) {
-				for (int z = z1; z <= z2; z++) {
-					b = world.getBlockAt(x, y, z);
-					if (b.getTypeId() != materialID || b.getData() != data) {
-						b.setTypeId(materialID);
-						b.setData(data);
-					}
-				}
-			}
-		}
 	}
 
 	private PermissionsInterface permissionHandler;
