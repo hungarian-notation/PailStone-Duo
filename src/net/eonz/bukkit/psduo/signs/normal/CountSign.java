@@ -32,15 +32,8 @@ import net.eonz.bukkit.psduo.signs.TriggerType;
 
 public class CountSign extends PSSign {
 
-	private int count; // The current count.
-
-	private static final int PULSE_TIME = 10;
-
-	private boolean ticking = false;
-	private int timer;
-
-	private boolean pulsed = false;
-
+	private int count;
+	
 	protected void triggersign(TriggerType type, Object args) {
 		BlockRedstoneEvent event = (BlockRedstoneEvent) args;
 		int input = this.getInputId(event);
@@ -48,32 +41,15 @@ public class CountSign extends PSSign {
 		if (event.getOldCurrent() == 0 && event.getNewCurrent() > 0) {
 			actions[input].applyAction(this, count);
 
-			if (count >= pulse && !pulsed)
-				pulse();
-			if (hasMod && (count % mod != count))
+			if (count == countTo) {
+				this.setOutput(true);
+			} else {
+				this.setOutput(false);
+			}
+
+			if (hasMod && ((count - 1) % mod != (count - 1)))
 				this.setCount(count % mod);
-			if (count < pulse)
-				pulsed = false;
 		}
-	}
-
-	private void pulse() {
-		timer = PULSE_TIME;
-		if (!ticking) {
-			this.startTicking();
-			ticking = true;
-			this.setOutput(true);
-		}
-		pulsed = true;
-	}
-
-	public boolean tick() {
-		timer--;
-		if (timer <= 0) {
-			ticking = false;
-			this.setOutput(false);
-		}
-		return ticking;
 	}
 
 	public String getData() {
@@ -137,7 +113,7 @@ public class CountSign extends PSSign {
 	}
 
 	private EdgeAction[] actions;
-	private int pulse, mod;
+	private int countTo, mod;
 	private boolean hasMod;
 
 	protected void declare(boolean reload, SignChangeEvent event) {
@@ -155,7 +131,7 @@ public class CountSign extends PSSign {
 
 		if (boundArgs.length > 0) {
 			try {
-				pulse = Integer.parseInt(boundArgs[0]);
+				countTo = Integer.parseInt(boundArgs[0]);
 			} catch (Exception e) {
 				if (!reload) {
 					this.init("There was an error reading the pulse count you specified.");
@@ -216,7 +192,7 @@ public class CountSign extends PSSign {
 
 		if (!reload) {
 			this.clearArgLines(event);
-			String line1 = Integer.toString(pulse);
+			String line1 = Integer.toString(countTo);
 			if (hasMod)
 				line1 += " " + Integer.toString(mod);
 			this.setLine(1, line1, event);
