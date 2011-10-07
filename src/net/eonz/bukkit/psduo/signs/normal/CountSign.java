@@ -33,7 +33,6 @@ import net.eonz.bukkit.psduo.signs.TriggerType;
 public class CountSign extends PSSign {
 
 	private int count;
-	private int lastAction = 0;
 
 	protected void triggersign(TriggerType type, Object args) {
 		BlockRedstoneEvent event = (BlockRedstoneEvent) args;
@@ -231,7 +230,6 @@ public class CountSign extends PSSign {
 	}
 
 	protected void setCount(int c) {
-		lastAction = c - count;
 		setCount(c, null);
 	}
 
