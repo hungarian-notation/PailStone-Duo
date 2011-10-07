@@ -35,25 +35,28 @@ public class CountSign extends PSSign {
 	private int count; // The current count.
 
 	private static final int PULSE_TIME = 10;
-	
+
 	private boolean ticking = false;
 	private int timer;
-	
+
 	private boolean pulsed = false;
-	
+
 	protected void triggersign(TriggerType type, Object args) {
-		BlockRedstoneEvent event = (BlockRedstoneEvent)args;
+		BlockRedstoneEvent event = (BlockRedstoneEvent) args;
 		int input = this.getInputId(event);
-		
+
 		if (event.getOldCurrent() == 0 && event.getNewCurrent() > 0) {
 			actions[input].applyAction(this, count);
-			
-			if (count >= pulse && !pulsed) pulse();
-			if (hasMod && (count % mod != count)) this.setCount(count % mod);
-			if (count < pulse) pulsed = false;
+
+			if (count >= pulse && !pulsed)
+				pulse();
+			if (hasMod && (count % mod != count))
+				this.setCount(count % mod);
+			if (count < pulse)
+				pulsed = false;
 		}
 	}
-	
+
 	private void pulse() {
 		timer = PULSE_TIME;
 		if (!ticking) {
@@ -63,7 +66,7 @@ public class CountSign extends PSSign {
 		}
 		pulsed = true;
 	}
-	
+
 	public boolean tick() {
 		timer--;
 		if (timer <= 0) {
@@ -117,7 +120,7 @@ public class CountSign extends PSSign {
 		public String toString() {
 			return type.operator + Integer.toString(value);
 		}
-		
+
 		public void applyAction(CountSign s, int ccount) {
 			switch (type) {
 			case INCREMENT:
@@ -164,7 +167,8 @@ public class CountSign extends PSSign {
 			if (boundArgs.length > 1) {
 				try {
 					mod = Integer.parseInt(boundArgs[1]);
-					if (mod <= 0) mod = 1;
+					if (mod <= 0)
+						mod = 1;
 					hasMod = true;
 				} catch (Exception e) {
 					if (!reload) {
@@ -209,7 +213,7 @@ public class CountSign extends PSSign {
 		}
 
 		// Format Lines
-		
+
 		if (!reload) {
 			this.clearArgLines(event);
 			String line1 = Integer.toString(pulse);
@@ -219,24 +223,28 @@ public class CountSign extends PSSign {
 			this.setLine(2, actions[0] + " " + actions[1] + " " + actions[2], event);
 			setCount(0, event);
 		}
-		
+
 		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);
 		if (!reload) {
 			this.init("Count sign accepted.");
 		}
 	}
-	
+
 	protected void setCount(int c) {
 		setCount(c, null);
 	}
-	
+
 	private void setCount(int c, SignChangeEvent e) {
 		this.count = c;
 		String line = "[" + Integer.toString(count) + "]";
-		if (e == null) {
-			this.setLine(3, line);
-		} else {
-			this.setLine(3, line, e);
+		try {
+			if (e == null) {
+				this.setLine(3, line);
+			} else {
+				this.setLine(3, line, e);
+			}
+		} catch (Exception error) {
+
 		}
 	}
 

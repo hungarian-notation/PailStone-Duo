@@ -43,7 +43,7 @@ public enum SignType {
 	
 	DISP(true), ANNOUNCE(true),
 	
-	CUBOID(false), SET(false), SPAWN(false), ITEM(false), BOLT(false);
+	CUBOID(false), SPAWN(false), ITEM(false), BOLT(false);
 	
 	public final boolean defaultPermission;
 	private SignType(boolean def) {
