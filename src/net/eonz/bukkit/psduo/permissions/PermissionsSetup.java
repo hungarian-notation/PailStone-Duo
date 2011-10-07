@@ -44,8 +44,10 @@ public class PermissionsSetup {
 			
 		}
 
-		System.out.println(pluginName + " is using default bukkit permissions.");
-		return new BukkitPermissionsModule(pluginName.toLowerCase());
+		//System.out.println(pluginName + " is using default bukkit permissions.");
+		//return new BukkitPermissionsModule(pluginName.toLowerCase());
+		
+		return null;
 	}
 
 }

@@ -24,21 +24,33 @@ package net.eonz.bukkit.psduo.permissions;
  * language governing rights and limitations under the Licenses. 
  */
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 public class BukkitPermissionsModule implements PermissionsInterface {
 	final String pluginName;
+	final Server serv;
 	private boolean groupNag = false;
 
-	public BukkitPermissionsModule(String pluginName) {
+	public BukkitPermissionsModule(String pluginName, Server serv) {
 		this.pluginName = pluginName;
+		this.serv = serv;
 	}
  
-	public boolean has(Player player, String permission, String world) {
-		return player.hasPermission(permission);
+	public boolean has(String player, String permission, String world) {
+		Player p = serv.getPlayer(player);
+				
+		if (p != null)
+		return p.hasPermission(permission);
+		
+		//OfflinePlayer op = serv.getOfflinePlayer(player);
+		
+		return false;
+		
+		//TODO: Figure out offline player permission checks with bukkit-perms.
 	}
 
-	public boolean inGroup(Player player, String group, String world) {
+	public boolean inGroup(String player, String group, String world) {
 		if (!groupNag) {
 			System.out.println(pluginName + "-Permissions: A call to the group functionality of my permissions interface was called, but you are using default bukkit permissions. Group functionality will fail safely and silently.");
 			groupNag = true;

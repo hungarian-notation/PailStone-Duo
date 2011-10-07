@@ -96,7 +96,7 @@ public class PSCommand implements CommandExecutor {
 	 */
 	private void listSigns(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length >= 2) {
-			Player p = main.getServer().getPlayer(args[1]);
+			String p = args[1];
 			if (p != null) {
 				if (args.length >= 3) {
 					if (main.getServer().getWorld(args[2]) != null) {
@@ -107,12 +107,9 @@ public class PSCommand implements CommandExecutor {
 				} else {
 					listSigns(p, sender, null);
 				}
-			} else {
-				PailStone.alert(sender, args[1] + " could not be found.");
-				PailStone.alert(sender, "Please note that " + args[1] + " must be logged in for this command to work.");
 			}
 		} else if (sender instanceof Player) {
-			listSigns((Player) sender, sender, null);
+			listSigns(((Player) sender).getName(), sender, null);
 		} else {
 			PailStone.alert(sender, "This command must be called by or on a player.");
 		}
@@ -125,10 +122,10 @@ public class PSCommand implements CommandExecutor {
 	 * @param sender
 	 * @param world
 	 */
-	private void listSigns(Player p, CommandSender sender, String world) {
-		String message = p.getName() + " can use: " + ChatColor.WHITE;
+	private void listSigns(String p, CommandSender sender, String world) {
+		String message = p + " can use: " + ChatColor.WHITE;
 
-		String actualWorld = ((world == null) ? p.getWorld().getName() : world);
+		String actualWorld = ((world == null) ? this.main.getServer().getWorlds().get(0).getName() : world);
 
 		for (SignType sign : SignType.values()) {
 			if (main.hasPermission(p, sign.name().toLowerCase(), actualWorld)) {

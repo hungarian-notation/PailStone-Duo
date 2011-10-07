@@ -51,7 +51,7 @@ public class CuboidSign extends PSSign {
 
 		if (mat != -1) {
 			int csize = Math.abs((x1 - x2 + 1) * (y1 - y2 + 1) * (z1 - z2 + 1));
-			if (csize > this.main.cfgMaxCuboid) {
+			if (csize > this.main.cfgMaxCuboid && !this.main.hasPermission(this.getOwnerName(), "ignoremaxsize", this.getWorld().getName())) {
 				this.main.alert(this.getOwnerName(), "The cuboid you specified was " + csize + " blocks big. The maximum acceptable area is " + this.main.cfgMaxCuboid + " blocks.");
 				return;
 			} else {
@@ -155,7 +155,7 @@ public class CuboidSign extends PSSign {
 
 		int csize = Math.abs((Math.abs(x1 - x2) + 1) * (Math.abs(y1 - y2) + 1) * (Math.abs(z1 - z2) + 1));
 
-		if (csize > this.main.cfgMaxCuboid) {
+		if (csize > this.main.cfgMaxCuboid && !this.main.hasPermission(this.getOwnerName(), "ignoremaxsize", this.getWorld().getName())) {
 			this.main.alert(this.getOwnerName(), "The cuboid you specified was " + csize + " blocks big. The maximum acceptable area is " + this.main.cfgMaxCuboid + " blocks.");
 			if (!reload) {
 				event.setCancelled(true);

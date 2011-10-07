@@ -24,8 +24,6 @@ package net.eonz.bukkit.psduo.permissions;
  * language governing rights and limitations under the Licenses. 
  */
 
-import org.bukkit.entity.Player;
-
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -38,11 +36,11 @@ public class PermissionsExModule implements PermissionsInterface {
 		this.pluginName = pluginName;
 	}
 	
-	public boolean has(Player player, String permission, String world) {
+	public boolean has(String player, String permission, String world) {
 		return permissions.has(player, permission, world);
 	}
 	
-	public boolean inGroup(Player player, String group, String world) {
+	public boolean inGroup(String player, String group, String world) {
 		return permissions.getUser(player).inGroup(group, world);
 	}
 }

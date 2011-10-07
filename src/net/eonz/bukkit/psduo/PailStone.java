@@ -145,7 +145,7 @@ public class PailStone extends JavaPlugin {
 	}
 
 	public void e(String message) {
-		log.log(Level.WARNING, "[ERROR] " + message);
+		log.log(Level.SEVERE, "[PailStone] [ERROR] " + message);
 	}
 
 	public void d(String message) {
@@ -199,15 +199,33 @@ public class PailStone extends JavaPlugin {
 
 	private void setupPermissions() {
 		permissionHandler = PermissionsSetup.getBestPermissions(this.getDescription().getName());
+		if (permissionHandler == null) {
+			this.e("No compatable permissions detected. All players will be able to use all PailStone features.");
+		}
 	}
 
 	public boolean hasPermission(Player p, String permission, String world) {
 		// Have to check all three due to a peculiarity in bukkit's built-in
 		// permissions.
+		return hasPermission(p.getName(), permission, world);
+	}
+
+	public boolean hasPermission(String p, String permission, String world) {
+		// Have to check all three due to a peculiarity in bukkit's built-in
+		// permissions.
+		if (this.permissionHandler == null)
+			return true;
+
 		return this.permissionHandler.has(p, "pailstone." + permission, world) || this.permissionHandler.has(p, "pailstone.*", world) || this.permissionHandler.has(p, "*", world);
 	}
 
 	public boolean inGroup(Player p, String world, String group) {
+		return this.inGroup(p.getName(), world, group);
+	}
+
+	public boolean inGroup(String p, String world, String group) {
+		if (this.permissionHandler == null)
+			return false;
 		return this.permissionHandler.inGroup(p, group, world);
 	}
 

@@ -24,12 +24,9 @@ package net.eonz.bukkit.psduo.permissions;
  * language governing rights and limitations under the Licenses. 
  */
 
-import org.bukkit.entity.Player;
-
-
 public interface PermissionsInterface {
 
-	public boolean has(Player player, String permission, String world);
-	public boolean inGroup(Player player, String group, String world);
+	public boolean has(String player, String permission, String world);
+	public boolean inGroup(String player, String group, String world);
 	
 }

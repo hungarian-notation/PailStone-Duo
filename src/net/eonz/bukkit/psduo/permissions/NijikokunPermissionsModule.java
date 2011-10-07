@@ -24,8 +24,6 @@ package net.eonz.bukkit.psduo.permissions;
  * language governing rights and limitations under the Licenses. 
  */
 
-import org.bukkit.entity.Player;
-
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
@@ -37,13 +35,13 @@ public class NijikokunPermissionsModule implements PermissionsInterface {
 	}
 	
 	@Override
-	public boolean has(Player player, String permission, String world) {
-		return handler.has(world, player.getName(), permission);
+	public boolean has(String player, String permission, String world) {
+		return handler.has(world, player, permission);
 	}
 	
 	@Override
-	public boolean inGroup(Player player, String group, String world) {
-		return handler.inGroup(world, player.getName(), group);
+	public boolean inGroup(String player, String group, String world) {
+		return handler.inGroup(world, player, group);
 	}
 	
 }
