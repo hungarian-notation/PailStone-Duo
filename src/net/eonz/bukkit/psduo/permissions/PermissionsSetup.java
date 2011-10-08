@@ -24,29 +24,34 @@ package net.eonz.bukkit.psduo.permissions;
  * language governing rights and limitations under the Licenses. 
  */
 
+import net.eonz.bukkit.psduo.PailStone;
+
 import org.bukkit.Bukkit;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class PermissionsSetup {
 
-	public static PermissionsInterface getBestPermissions(String pluginName) {
+	public static PermissionsInterface getBestPermissions(PailStone pailstone) {
 		try {
 			if (Bukkit.getServer().getPluginManager().isPluginEnabled("PermissionsEx")) {
-				System.out.println(pluginName + " is using PermissionsEx.");
-				return new PermissionsExModule(pluginName.toLowerCase());
+				return new PermissionsExModule();
 			} else if (Bukkit.getServer().getPluginManager().isPluginEnabled("Permissions")) {
-				System.out.println(pluginName + " is using nijikokun's permissions (or a derivative).");
-				Permissions perms = (Permissions)Bukkit.getServer().getPluginManager().getPlugin("Permissions");
-				return new NijikokunPermissionsModule(perms, pluginName);
+				Permissions perms = (Permissions) Bukkit.getServer().getPluginManager().getPlugin("Permissions");
+				return new NijikokunPermissionsModule(perms);
 			}
 		} catch (Exception e) {
-			
+
 		}
 
-		//System.out.println(pluginName + " is using default bukkit permissions.");
-		//return new BukkitPermissionsModule(pluginName.toLowerCase());
-		
+		// System.out.println(pluginName +
+		// " is using default bukkit permissions.");
+		// return new BukkitPermissionsModule(pluginName.toLowerCase());
+
+		if (pailstone.allowList.size() > 0) {
+			return new PseudoPermissionsModule(pailstone.allowList);
+		}
+
 		return null;
 	}
 

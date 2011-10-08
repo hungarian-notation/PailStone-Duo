@@ -28,5 +28,6 @@ public interface PermissionsInterface {
 
 	public boolean has(String player, String permission, String world);
 	public boolean inGroup(String player, String group, String world);
+	public String getName();
 	
 }

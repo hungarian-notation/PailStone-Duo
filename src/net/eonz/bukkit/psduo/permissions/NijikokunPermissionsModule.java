@@ -30,7 +30,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class NijikokunPermissionsModule implements PermissionsInterface {
 
 	private final PermissionHandler handler;
-	public NijikokunPermissionsModule(Permissions permissions, String pluginName) {
+	public NijikokunPermissionsModule(Permissions permissions) {
 		handler = permissions.getHandler();
 	}
 	
@@ -42,6 +42,11 @@ public class NijikokunPermissionsModule implements PermissionsInterface {
 	@Override
 	public boolean inGroup(String player, String group, String world) {
 		return handler.inGroup(world, player, group);
+	}
+
+	@Override
+	public String getName() {
+		return "Nijikokun's Permissions (or a derivative)";
 	}
 	
 }

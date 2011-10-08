@@ -58,4 +58,9 @@ public class BukkitPermissionsModule implements PermissionsInterface {
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return "Bukkit Permissions";
+	}
+
 }

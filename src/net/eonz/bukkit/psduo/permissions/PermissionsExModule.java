@@ -28,12 +28,10 @@ import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class PermissionsExModule implements PermissionsInterface {
-	final PermissionManager permissions; 
-	final String pluginName;
+	final PermissionManager permissions;
 	
-	public PermissionsExModule(String pluginName) {
+	public PermissionsExModule() {
 		this.permissions = PermissionsEx.getPermissionManager();
-		this.pluginName = pluginName;
 	}
 	
 	public boolean has(String player, String permission, String world) {
@@ -42,6 +40,10 @@ public class PermissionsExModule implements PermissionsInterface {
 	
 	public boolean inGroup(String player, String group, String world) {
 		return permissions.getUser(player).inGroup(group, world);
+	}
+
+	public String getName() {
+		return "PermissionsEx";
 	}
 }
  

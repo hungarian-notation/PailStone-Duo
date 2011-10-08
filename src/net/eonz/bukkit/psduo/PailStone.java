@@ -84,6 +84,7 @@ public class PailStone extends JavaPlugin {
 	public int cfgMaxCuboid;
 	public List<Integer> blockList;
 	public boolean useWhiteList;
+	public List<String> allowList;
 
 	// END CONFIG --------------
 
@@ -104,11 +105,17 @@ public class PailStone extends JavaPlugin {
 
 		cfg = new PailConfigFile(this, configFile);
 		cfg.load();
+		
+		ArrayList<String> devList = new ArrayList<String>();
+		devList.add("Hafnium");
+		devList.add("Thulinma");
+		devList.add("imjake9");
 
 		cfgWipeProtection = cfg.getBoolean("wipe-protection", true);
 		cfgMaxCuboid = cfg.getInt("max-cuboid-area", 400);
 		blockList = cfg.getIntegerList("block-blacklist", new ArrayList<Integer>());
 		useWhiteList = cfg.getBoolean("use-blacklist-as-whitelist", false);
+		allowList = cfg.getCSV("allow-list", devList);
 
 		cfg.announce();
 
@@ -198,9 +205,11 @@ public class PailStone extends JavaPlugin {
 	private PermissionsInterface permissionHandler;
 
 	private void setupPermissions() {
-		permissionHandler = PermissionsSetup.getBestPermissions(this.getDescription().getName());
+		permissionHandler = PermissionsSetup.getBestPermissions(this);
 		if (permissionHandler == null) {
-			this.e("No compatable permissions detected. All players will be able to use all PailStone features.");
+			this.e("No compatable permissions detected. All players will be able to use all PailStone features. You can add players to allow-list so that only they will be able to use pailstone's features.");
+		} else {
+			this.c("using " + permissionHandler.getName() + ".");
 		}
 	}
 

@@ -138,7 +138,7 @@ public class PailConfigFile {
 		String defaultList = "";
 		for (int i = 0; i < defaultValue.size(); i++) {
 			if (i != 0)
-				defaultList += ",";
+				defaultList += ", ";
 			defaultList += defaultValue.get(i);
 		}
 
@@ -149,15 +149,40 @@ public class PailConfigFile {
 		List<Integer> val = new ArrayList<Integer>();
 		String[] split = valString.replaceAll(" ", "").split(",");
 		for (String s : split) {
-			try {
-				Integer nextVal = new Integer(s);
-				val.add(nextVal);
-			} catch (NumberFormatException e) {
-				main.e("Found \"" + s + "\" as an item in " + key + ". " + key + " is required to be a list of integers.");
-				continue;
+			s = s.trim();
+			if (!s.equals("")) {
+				try {
+					Integer nextVal = new Integer(s);
+					val.add(nextVal);
+				} catch (NumberFormatException e) {
+					main.e("Found \"" + s + "\" as an item in " + key + ". " + key + " is required to be a list of integers.");
+					continue;
+				}
 			}
 		}
 		return val;
+	}
+
+	public List<String> getCSV(String key, List<String> defaultValue) {
+		String defaultList = "";
+
+		for (int i = 0; i < defaultValue.size(); i++) {
+			if (i != 0)
+				defaultList += ", ";
+			defaultList += defaultValue.get(i);
+		}
+
+		String valString = this.getString(key, defaultList);
+
+		List<String> csv = new ArrayList<String>();
+		String[] split = valString.split(",");
+		for (String s : split) {
+			s = s.trim();
+			if (!s.equals(""))
+				csv.add(s);
+		}
+
+		return csv;
 	}
 
 	public int getInt(String key, int defaultValue) {
