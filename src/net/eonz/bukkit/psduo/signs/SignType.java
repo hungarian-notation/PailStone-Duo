@@ -29,24 +29,26 @@ package net.eonz.bukkit.psduo.signs;
  */
 
 public enum SignType {
-	TEST(false),
+	TEST(false, false),
 	
-	RAND(true),
+	RAND(true, true),
 	
-	LOGIC(true), DELAY(true), TOGGLE(true), PULSE(true),
+	LOGIC(true, true), DELAY(true, true), TOGGLE(true, true), PULSE(true, true),
 	
-	SEND(true), RECV(true), TRIGGER(true), CLICK(true),
+	SEND(true, true), RECV(true, true), TRIGGER(true, true), CLICK(true, true),
 	
-	COUNT(true), CLOCK(true),
+	COUNT(true, true), CLOCK(true, true),
 	
-	CTIME(true), CWEATHER(true), LOGGED(true), SENSOR(true),
+	CTIME(true, true), CWEATHER(true, true), LOGGED(true, true), SENSOR(true, true),
 	
-	DISP(true), ANNOUNCE(true),
+	DISP(true, false), ANNOUNCE(true, false),
 	
-	CUBOID(false), SPAWN(false), ITEM(false), BOLT(false);
+	CUBOID(false, true), SPAWN(false, true), ITEM(false, true), BOLT(false, true);
 	
 	public final boolean defaultPermission;
-	private SignType(boolean def) {
+	public final boolean reloadable;
+	private SignType(boolean def, boolean reloadable) {
 		this.defaultPermission = def;
+		this.reloadable = reloadable;
 	}
 }

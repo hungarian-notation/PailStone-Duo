@@ -32,9 +32,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 
 import net.eonz.bukkit.psduo.Direction;
 import net.eonz.bukkit.psduo.PailStone;
@@ -283,6 +285,20 @@ public class SignController {
 		}
 
 		return all;
+	}
+	
+	public PSSign getPSInstance(Sign s) {
+		ArrayList<PSSign> signs = getAllSigns();
+		Iterator<PSSign> i = signs.iterator();
+		
+		while (i.hasNext()) {
+			PSSign nsign = i.next();
+			if (s.getBlock().getLocation().equals(nsign.getLocation())) {
+				return nsign;
+			}
+		}
+		
+		return null;
 	}
 
 	/**

@@ -24,9 +24,16 @@ package net.eonz.bukkit.psduo;
  * language governing rights and limitations under the Licenses. 
  */
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.SignType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -53,11 +60,94 @@ public class PSCommand implements CommandExecutor {
 				listSigns(sender, command, label, args);
 				return true;
 			}
+
+			if (args[0].equalsIgnoreCase("loadsigns")) {
+				loadSigns(sender, command, label, args);
+				return true;
+			}
 		}
 
 		sender.sendMessage("Malformed command.");
 
 		return true;
+	}
+
+	private void loadSigns(CommandSender sender, Command command, String label, String[] args) {
+		if (!(sender instanceof Player)) {
+			PailStone.alert(sender, "This command must be called by a player.");
+			return;
+		}
+
+		Player player = (Player) sender;
+
+		Chunk player_chunk = player.getWorld().getChunkAt(player.getLocation());
+
+		int radius = 32;
+		
+		if (args.length >= 2) {
+			try {
+				radius = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				PailStone.alert(sender, "Could not read radius as a number.");
+				return;
+			}
+		}
+		
+		int maxRadius = 16 * 5;
+		
+		if (radius <= 0 || radius > maxRadius) {
+			PailStone.alert(sender, "Radius out of bounds. Acceptable values are 1 to " + maxRadius + ".");
+			return;
+		}
+		
+		int pcx = player_chunk.getX();
+		int pcz = player_chunk.getZ();
+
+		ArrayList<Sign> signs = new ArrayList<Sign>();
+
+		ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+
+		int chunk_radius = radius / 16 + 1;
+
+		for (int x = -chunk_radius; x <= +chunk_radius; x++) {
+			for (int z = -chunk_radius; z <= +chunk_radius; z++) {
+				chunks.add(player.getWorld().getChunkAt(pcx + x, pcz + z));
+			}
+		}
+
+		int existingSigns = 0;
+
+		java.util.Iterator<Chunk> chunkIt = chunks.iterator();
+		while (chunkIt.hasNext()) {
+			Chunk nextChunk = chunkIt.next();
+			
+			if (!nextChunk.isLoaded()) {
+				nextChunk.load();
+			}
+
+			BlockState[] entities = nextChunk.getTileEntities();
+			for (BlockState entity : entities) {
+				if (entity instanceof Sign) {
+					int xdiff = entity.getX() - player.getLocation().getBlockX();
+					int zdiff = entity.getZ() - player.getLocation().getBlockZ();
+					if (Math.floor(Math.sqrt(xdiff * xdiff + zdiff * zdiff)) <= radius) {
+						if (this.main.sgc.getPSInstance((Sign) entity) == null) {
+							signs.add((Sign) entity);
+						} else {
+							existingSigns++;
+						}
+					}
+				}
+			}
+		}
+
+		PailStone.alert(sender, "Found " + (signs.size() + existingSigns) + " signs within " + radius + " blocks. " + signs.size() + " are unloaded. Attempting to load them now...");
+		Iterator<Sign> signIt = signs.iterator();
+		while (signIt.hasNext()) {
+			Sign next = signIt.next();
+			Direction d = PSSign.getDirection(next);
+			PSSign.signFactory(PailStone.formatLines(next.getLines()), player.getName(), "", next.getWorld().getName(), next.getBlock().getLocation(), d, true, true, null, this.main);
+		}
 	}
 
 	/**
@@ -69,6 +159,11 @@ public class PSCommand implements CommandExecutor {
 	 * @param args
 	 */
 	private void setMessage(CommandSender sender, Command command, String label, String[] args) {
+		if (!(sender instanceof Player)) {
+			PailStone.alert(sender, "This command must be called by a player.");
+			return;
+		}
+
 		Player p = (Player) sender;
 
 		if (args.length > 1) {

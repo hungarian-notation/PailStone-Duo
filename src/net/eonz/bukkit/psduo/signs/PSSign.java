@@ -564,6 +564,10 @@ public abstract class PSSign {
 		return (o instanceof PSSign && o == this);
 	}
 
+	public static void signFactory(String[] lines, String owner, String data, String world, Location l, Direction facing, boolean serverReload, SignChangeEvent event, PailStone main) {
+		signFactory(lines, owner, data, world, l, facing, serverReload, false, event, main);
+	}
+	
 	/**
 	 * This is where the new sign data will be converted into an object of the
 	 * sign class.
@@ -573,9 +577,9 @@ public abstract class PSSign {
 	 * @param data
 	 * @param l
 	 */
-	public static void signFactory(String[] lines, String owner, String data, String world, Location l, Direction facing, boolean reload, SignChangeEvent event, PailStone main) {
+	public static void signFactory(String[] lines, String owner, String data, String world, Location l, Direction facing, boolean serverReload, boolean signReload, SignChangeEvent event, PailStone main) {
 		String[] rlines = null;
-		if (reload) {
+		if (serverReload) {
 			rlines = PailStone.formatLines(lines);
 		} else {
 			rlines = PailStone.formatLines(event.getLines());
@@ -606,12 +610,17 @@ public abstract class PSSign {
 
 		String permission = type.name().toLowerCase();
 
-		if ((!reload) && (!main.hasPermission(main.getServer().getPlayer(owner), permission, world))) {
+		if ((!serverReload) && (!main.hasPermission(main.getServer().getPlayer(owner), permission, world))) {
 			main.c(owner + " tried to make a " + type + " sign, but lacks the proper permissions.");
 			main.alert(owner, "You do not have permission to create this sign.");
 			return;
 		}
 
+		if ((!type.reloadable) && signReload) {
+			main.alert(owner, "You can't batch reload " + type + " signs.");
+			return;
+		}
+		
 		switch (type) {
 		case TEST:
 			newSign = new TestSign();
@@ -682,13 +691,13 @@ public abstract class PSSign {
 		}
 
 		if (newSign != null) {
-			newSign.initialize(type, lines, owner, data, world, l, facing, reload, event, main);
-		} else if (!reload) {
+			newSign.initialize(type, lines, owner, data, world, l, facing, serverReload, event, main);
+		} else if (!serverReload) {
 			main.alert(owner, "Error while creating sign.");
 			event.setCancelled(true);
 		}
 
-		if (!reload) {
+		if (!serverReload) {
 			main.c(owner + " created a sign of type " + type.name() + ".");
 		}
 	}
