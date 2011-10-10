@@ -117,7 +117,15 @@ public class CuboidUtil {
 				b.setData(dat);
 		}
 	}
-
+	
+	public static int areaBetween(org.bukkit.Location l1, org.bukkit.Location l2) {
+		int xsize = Math.abs(l1.getBlockX() - l2.getBlockX());
+		int ysize = Math.abs(l1.getBlockY() - l2.getBlockY());
+		int zsize = Math.abs(l1.getBlockZ() - l2.getBlockZ());
+		
+		return xsize * ysize * zsize;
+	}
+	
 	public static enum CuboidType {
 		CUBOID('R'), ELLIPSOID('E');
 		

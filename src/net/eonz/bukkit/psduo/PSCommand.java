@@ -26,6 +26,7 @@ package net.eonz.bukkit.psduo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.SignType;
@@ -65,11 +66,97 @@ public class PSCommand implements CommandExecutor {
 				loadSigns(sender, command, label, args);
 				return true;
 			}
+
+			if (args[0].equalsIgnoreCase("area")) {
+				areaManager(sender, command, label, args);
+				return true;
+			}
 		}
 
-		sender.sendMessage("Malformed command.");
+		PailStone.alert(sender, "Malformed Command");
 
 		return true;
+	}
+
+	private void areaManager(CommandSender sender, Command command, String label, String[] args) {
+		if (sender instanceof Player && !main.hasPermission(((Player) sender).getName(), "area", ((Player) sender).getWorld().getName())) {
+			PailStone.alert(sender, "You do not have the 'pailstone.area' permission.");
+			return;
+		}
+
+		if (args.length == 1) {
+			if (isPlayer(sender)) {
+				Player p = (Player) sender;
+				List<Area> areas = main.areas.getPlayerAreas(p.getName());
+
+				String list = "";
+
+				for (int i = 0; i < areas.size(); i++) {
+					if (i != 0) {
+						list += ", ";
+					}
+					list += areas.get(i).getName();
+				}
+
+				PailStone.alert(p, "Your Areas: " + list);
+			} else {
+				return;
+			}
+		}
+
+		if (args.length >= 2) {
+			if (args[1].equalsIgnoreCase("define") && isPlayer(sender)) {
+				defineArea(sender, command, label, args);
+				return;
+			}
+
+			if (args[1].equalsIgnoreCase("restore")) {
+				restoreArea(sender, command, label, args);
+				return;
+			}
+		}
+
+		PailStone.alert(sender, "Malformed Command");
+	}
+
+	private void restoreArea(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length >= 3) {
+			Area a = main.areas.getArea(args[2]);
+			if (a != null) {
+				a.draw(main);
+				PailStone.alert(sender, "Area restored.");
+			}
+		} else {
+			PailStone.alert(sender, "Specify the name of the area to restore.");
+		}
+	}
+
+	private void defineArea(CommandSender sender, Command command, String label, String[] args) {
+		Player p = (Player) sender;
+
+		if (args.length < 3) {
+			PailStone.alert(sender, "You must specify a name for the proposed area.");
+		} else {
+			String areaName = args[2];
+
+			if (areaName.length() > 15) {
+				PailStone.alert(sender, "The area name you specified was " + areaName.length() + " long, but only 15 letters can fit on a sign. Pick another name for your area.");
+				return;
+			}
+
+			PSPlayer psp = this.main.players.safelyGet(p.getName(), main);
+			if (!(psp.l1 && (psp.loc2 != null))) {
+				PailStone.alert(sender, "You must first define two points with glowstone dust.");
+			} else if (!psp.validatePoints()) {
+				PailStone.alert(sender, "The two points you specified are invalid. Try again.");
+			} else if (CuboidUtil.areaBetween(psp.loc1, psp.loc2) > this.main.cfgMaxCuboid && !this.main.hasPermission(p.getName(), "ignoremaxsize", psp.loc1.getWorld().getName())) {
+				PailStone.alert(sender, "The toggle area you specified was " + CuboidUtil.areaBetween(psp.loc1, psp.loc2) + " blocks big. This is " + (CuboidUtil.areaBetween(psp.loc1, psp.loc2) - this.main.cfgMaxCuboid) + " larger than the limit of " + this.main.cfgMaxCuboid
+						+ ". Please designate a smaller area.");
+			} else {
+				this.main.areas.defineArea(areaName, p.getName(), psp.loc1, psp.loc2);
+				PailStone.alert(sender, "Created '" + areaName + "'.");
+			}
+		}
 	}
 
 	private void loadSigns(CommandSender sender, Command command, String label, String[] args) {
@@ -83,7 +170,7 @@ public class PSCommand implements CommandExecutor {
 		Chunk player_chunk = player.getWorld().getChunkAt(player.getLocation());
 
 		int radius = 32;
-		
+
 		if (args.length >= 2) {
 			try {
 				radius = Integer.parseInt(args[1]);
@@ -92,14 +179,14 @@ public class PSCommand implements CommandExecutor {
 				return;
 			}
 		}
-		
+
 		int maxRadius = 16 * 5;
-		
+
 		if (radius <= 0 || radius > maxRadius) {
 			PailStone.alert(sender, "Radius out of bounds. Acceptable values are 1 to " + maxRadius + ".");
 			return;
 		}
-		
+
 		int pcx = player_chunk.getX();
 		int pcz = player_chunk.getZ();
 
@@ -120,7 +207,7 @@ public class PSCommand implements CommandExecutor {
 		java.util.Iterator<Chunk> chunkIt = chunks.iterator();
 		while (chunkIt.hasNext()) {
 			Chunk nextChunk = chunkIt.next();
-			
+
 			if (!nextChunk.isLoaded()) {
 				nextChunk.load();
 			}

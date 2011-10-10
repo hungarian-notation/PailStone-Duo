@@ -58,6 +58,8 @@ public class PailStone extends JavaPlugin {
 	 * The player info tracker.
 	 */
 	public PSPlayers players = new PSPlayers();
+	
+	public AreaManager areas;
 
 	/**
 	 * The block listener for signs
@@ -80,6 +82,7 @@ public class PailStone extends JavaPlugin {
 
 	// CONFIG KEYS -------------
 
+	public boolean cfgDebug;
 	public boolean cfgWipeProtection;
 	public int cfgMaxCuboid;
 	public List<Integer> blockList;
@@ -88,13 +91,20 @@ public class PailStone extends JavaPlugin {
 
 	// END CONFIG --------------
 
-	public void onDisable() {
+	public void saveData() {
 		sgc.save();
 		cfg.save();
+		areas.saveAreas();
+	}
+	
+	public void onDisable() {
+		saveData();
 		this.c("Finished unloading. (" + this.getDescription().getVersion() + ")");
 	}
 
 	public void onEnable() {
+		areas = new AreaManager(this);
+		
 		PluginDescriptionFile pdf = this.getDescription();
 
 		this.c("Loading PailStone");
@@ -111,6 +121,7 @@ public class PailStone extends JavaPlugin {
 		devList.add("Thulinma");
 		devList.add("imjake9");
 
+		cfgDebug = cfg.getBoolean("debug", false);
 		cfgWipeProtection = cfg.getBoolean("wipe-protection", true);
 		cfgMaxCuboid = cfg.getInt("max-cuboid-area", 400);
 		blockList = cfg.getIntegerList("block-blacklist", new ArrayList<Integer>());

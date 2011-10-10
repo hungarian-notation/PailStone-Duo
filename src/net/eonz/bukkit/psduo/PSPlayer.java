@@ -66,6 +66,10 @@ public class PSPlayer {
 		l1 = true;
 	}
 	
+	public boolean validatePoints() {
+		return (loc1.getWorld() == loc2.getWorld());
+	}
+	
 	public void setLoc(Location l) {
 		if (l1) {
 			setLoc1(l);

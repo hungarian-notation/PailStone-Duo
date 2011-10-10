@@ -682,6 +682,9 @@ public abstract class PSSign {
 		case SPAWN:
 			newSign = new SpawnSign();
 			break;
+		case AREA:
+			newSign = new AreaSign();
+			break;
 		case ITEM:
 			newSign = new ItemSign();
 			break;
