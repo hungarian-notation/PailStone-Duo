@@ -11,7 +11,7 @@ import java.util.List;
 import org.bukkit.Location;
 
 public class AreaManager {
-	private static File areaDirectory = new File(PailStone.dataPath + "areas/");
+	public static File areaDirectory = new File(PailStone.dataPath + "areas/");
 
 	static {
 		if (!areaDirectory.exists()) {
@@ -82,5 +82,13 @@ public class AreaManager {
 
 	public void defineArea(String areaName, String playerName, Location l1, Location l2) {
 		this.areas.put(areaName, Area.newArea(l1, l2, areaName, playerName));
+	}
+	
+	/**
+	 * Removes an area from the manager. This should only be called by the Area class. To delete an Area, call its 'void delete(Pailstone p)' function. 
+	 * @param a
+	 */
+	public void remove(Area a) {
+		this.areas.remove(a.getName());
 	}
 }

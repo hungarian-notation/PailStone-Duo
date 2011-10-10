@@ -26,6 +26,7 @@ package net.eonz.bukkit.psduo.signs.normal;
 
 import org.bukkit.event.block.SignChangeEvent;
 
+import net.eonz.bukkit.psduo.PSPlayer;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 import net.eonz.bukkit.psduo.signs.WirelessPacket;
@@ -61,21 +62,24 @@ public class RecvSign extends PSSign {
 		String channel = this.getLines()[1];
 		
 		if (!reload) {
+			PSPlayer psp = this.main.players.safelyGet(this.getOwnerName(), this.main);
 
+			if (channel.trim().equals("") && psp.getChannel() != null) {
+				channel = psp.getChannel();
+			}
+			
 			if (band.trim().equals("")) {
-				band = this.getOwnerName();
-			} else if (!band.equalsIgnoreCase(this.getOwnerName())) {
-				if (band.charAt(0) == '~') {
-					// GOOD!
-				} else {
+				band = psp.getBand();
+			} else if (!band.equalsIgnoreCase(this.getOwnerName()) && (!(band.charAt(0) == '~'))) {
 					band = "~" + band;
-				}
 			}
 
+			psp.setChannel(channel);
+			psp.setBand(band);
+			
 			this.clearArgLines(event);
 			this.setLine(1, channel, event);
 			this.setLine(2, band, event);
-
 		}
 
 		p = new WirelessPacket(band, channel, false);

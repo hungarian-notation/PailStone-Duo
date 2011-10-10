@@ -116,9 +116,29 @@ public class PSCommand implements CommandExecutor {
 				restoreArea(sender, command, label, args);
 				return;
 			}
+
+			if (args[1].equalsIgnoreCase("delete")) {
+				deleteArea(sender, command, label, args);
+				return;
+			}
 		}
 
 		PailStone.alert(sender, "Malformed Command");
+	}
+
+	private void deleteArea(CommandSender sender, Command command, String label, String[] args) {
+
+		if (args.length >= 3) {
+			Area a = main.areas.getArea(args[2]);
+			if (a != null) {
+				a.delete(main);
+				PailStone.alert(sender, "The '" + a.getName() + "' area was deleted.");
+			} else {
+				PailStone.alert(sender, "No such area.");
+			}
+		} else {
+			PailStone.alert(sender, "Specify the name of the area to delete.");
+		}
 	}
 
 	private void restoreArea(CommandSender sender, Command command, String label, String[] args) {
@@ -126,7 +146,9 @@ public class PSCommand implements CommandExecutor {
 			Area a = main.areas.getArea(args[2]);
 			if (a != null) {
 				a.draw(main);
-				PailStone.alert(sender, "Area restored.");
+				PailStone.alert(sender, "The '" + a.getName() + "' area was restored.");
+			} else {
+				PailStone.alert(sender, "No such area.");
 			}
 		} else {
 			PailStone.alert(sender, "Specify the name of the area to restore.");

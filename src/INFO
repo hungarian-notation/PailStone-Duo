@@ -8,6 +8,11 @@ TODO
 
 CHANGELOG
 
+3.8
+
+	Added :area
+	Added /ps area [(define|restore)] command tree.
+
 3.7
 
 	Added shape args to :cuboid, added ellipsoid cuboid shape.

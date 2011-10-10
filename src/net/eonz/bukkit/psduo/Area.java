@@ -40,7 +40,7 @@ public class Area {
 			return true;
 		}
 	}
-	
+
 	public int getSize() {
 		return xsize * ysize * zsize;
 	}
@@ -207,7 +207,7 @@ public class Area {
 			int x1 = loc.getBlockX();
 			int y1 = loc.getBlockY();
 			int z1 = loc.getBlockZ();
-			
+
 			for (int x = x1; x < x1 + xsize; x++) {
 				for (int y = y1; y < y1 + ysize; y++) {
 					for (int z = z1; z < z1 + zsize; z++) {
@@ -218,6 +218,29 @@ public class Area {
 		} catch (Exception e) {
 			plugin.e(e.getMessage() + " while trying to draw area '" + this.getName() + "'.");
 		}
+	}
+
+	public void offload(PailStone plugin) {
+		try {
+			if (this.isModified)
+				save(plugin);
+			
+			isLoaded = false;
+			isModified = false;
+			block = null;
+			data = null;
+		} catch (Exception e) {
+			plugin.e(e.getMessage() + " while saving the '" + this.getName() + "' area during offload. Offload canceled.");
+			if (plugin.cfgDebug)
+				e.printStackTrace();
+		}
+	}
+
+	public void delete(PailStone plugin) {
+		this.offload(plugin);
+		this.getFile().delete();
+		this.isModified = false;
+		plugin.areas.remove(this);
 	}
 
 	public static Area newArea(Location pos1, Location pos2, String areaName, String ownerName) {

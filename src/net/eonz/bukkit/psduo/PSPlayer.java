@@ -33,11 +33,12 @@ public class PSPlayer {
 	public final String name;
 	public Location loc1, loc2;
 	public boolean l1 = true;
-	public String message = null;
+	public String message = null, lastChannel = null, lastBand;
 	private final PailStone main;
 	
 	public PSPlayer(String name, PailStone main) {
 		this.name = name;
+		this.lastBand = name;
 		this.main = main;
 		this.main.c("Created new player tracker for " + name + ".");
 	}
@@ -82,5 +83,20 @@ public class PSPlayer {
 		this.message = message;
 	}
 	
+	public void setChannel(String channel) {
+		this.lastChannel = channel;
+	}
+	
+	public void setBand(String band) {
+		this.lastBand = band;
+	}
+	
+	public String getChannel() {
+		return lastChannel;
+	}
+	
+	public String getBand() {
+		return lastBand;
+	}
 }
 
