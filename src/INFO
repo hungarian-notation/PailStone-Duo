@@ -11,7 +11,8 @@ CHANGELOG
 3.8
 
 	Added :area
-	Added /ps area [(define|restore)] command tree.
+	Added /ps area [(define|restore|delete)] command tree.
+	:send and :recv signs now remember the last used band and channel and will autofill with them.
 
 3.7
 
