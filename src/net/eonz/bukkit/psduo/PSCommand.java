@@ -99,8 +99,10 @@ public class PSCommand implements CommandExecutor {
 				}
 
 				PailStone.alert(p, "Your Areas: " + list);
-			} else {
+				
 				return;
+			} else {
+				PailStone.alert(sender, "The console can't have any defined areas.");
 			}
 		}
 
