@@ -34,7 +34,7 @@ public class PulseSign extends PSSign {
 
 	private boolean lastState = false;
 
-	private static final int PULSE_TIME = 10;
+	private int pulseTime = 10;
 	
 	private boolean ticking = false;
 	private int timer;
@@ -54,7 +54,7 @@ public class PulseSign extends PSSign {
 	}
 
 	private void pulse() {
-		timer = PULSE_TIME;
+		timer = pulseTime;
 		if (!ticking) {
 			this.startTicking();
 			ticking = true;
@@ -107,8 +107,20 @@ public class PulseSign extends PSSign {
 			return;
 		}
 		
+		String pulseLine = this.getLines(event)[2].trim();
+		
+		if (!pulseLine.equals("")) {
+			try {
+				pulseTime = Integer.parseInt(pulseLine);
+			} catch (Exception e) {
+				this.init("Could not parse pulse length.");
+				return;
+			}
+		}
+		
 		if (!reload) {
 			this.setLine(1, edgeLine.toUpperCase(), event);
+			this.setLine(2, "" + pulseTime, event);
 		}
 		
 		main.sgc.register(this, TriggerType.REDSTONE_CHANGE);

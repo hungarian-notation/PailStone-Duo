@@ -63,6 +63,8 @@ public class ArrowSign extends PSSign {
 				this.main.cleaner.register(a, 5000);
 
 			}
+			
+			this.getWorld().playEffect(from, org.bukkit.Effect.BOW_FIRE, 0);
 		} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState) {
 			lastState = false;
 		} else {
