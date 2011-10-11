@@ -188,4 +188,11 @@ public enum Direction {
 
 	}
 
+	public static Location center(Location l) {
+		l.setX(l.getBlockX() + .5);
+		l.setY(l.getBlockY() + .5);
+		l.setZ(l.getBlockZ() + .5);
+		
+		return l;
+	}
 }

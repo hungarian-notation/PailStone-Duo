@@ -1,4 +1,4 @@
-package net.eonz.bukkit.psduo;
+package net.eonz.bukkit.psduo.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import net.eonz.bukkit.psduo.PailStone;
 
 import org.bukkit.Location;
 

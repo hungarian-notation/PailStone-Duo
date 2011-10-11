@@ -24,7 +24,7 @@ package net.eonz.bukkit.psduo;
  * language governing rights and limitations under the Licenses. 
  */
 
-import net.eonz.bukkit.psduo.signs.SignController;
+import net.eonz.bukkit.psduo.controllers.SignController;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
 public class PSTickUpdate implements Runnable {

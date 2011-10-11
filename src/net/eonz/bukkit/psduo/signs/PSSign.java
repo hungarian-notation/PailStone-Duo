@@ -676,6 +676,9 @@ public abstract class PSSign {
 		case ANNOUNCE:
 			newSign = new AnnounceSign();
 			break;
+		case ARROW:
+			newSign = new ArrowSign();
+			break;
 		case CUBOID:
 			newSign = new CuboidSign();
 			break;

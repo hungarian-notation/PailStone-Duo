@@ -27,7 +27,7 @@ package net.eonz.bukkit.psduo.signs.normal;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
-import net.eonz.bukkit.psduo.Area;
+import net.eonz.bukkit.psduo.controllers.Area;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
@@ -73,6 +73,12 @@ public class AreaSign extends PSSign {
 
 		if (!reload) {
 			Area a = this.main.areas.getArea(areaName);
+			
+			if (a == null) {
+				this.main.alert(this.getOwnerName(), "There is no area of that name available to you.");
+				return;
+			}
+			
 			a.ready(this.main);
 
 			if (a.getOwnerName().equals(this.getOwnerName())) {
@@ -80,6 +86,7 @@ public class AreaSign extends PSSign {
 				this.setLine(1, areaName, event);
 			} else {
 				this.main.alert(this.getOwnerName(), "There is no area of that name available to you.");
+				return;
 			}
 		}
 

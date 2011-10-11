@@ -24,6 +24,8 @@ package net.eonz.bukkit.psduo.signs;
  * language governing rights and limitations under the Licenses. 
  */
 
+import net.eonz.bukkit.psduo.controllers.SignController;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

@@ -30,7 +30,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import net.eonz.bukkit.psduo.CuboidUtil;
 import net.eonz.bukkit.psduo.CuboidUtil.CuboidType;
-import net.eonz.bukkit.psduo.PSPlayer;
+import net.eonz.bukkit.psduo.controllers.PSPlayer;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 

@@ -24,6 +24,7 @@ package net.eonz.bukkit.psduo;
  * language governing rights and limitations under the Licenses. 
  */
 
+import net.eonz.bukkit.psduo.controllers.PSPlayers;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
 import org.bukkit.Material;

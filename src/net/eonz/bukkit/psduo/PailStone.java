@@ -30,10 +30,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.eonz.bukkit.psduo.controllers.AreaManager;
+import net.eonz.bukkit.psduo.controllers.EntityCleaner;
+import net.eonz.bukkit.psduo.controllers.PSPlayers;
+import net.eonz.bukkit.psduo.controllers.SignController;
 import net.eonz.bukkit.psduo.permissions.PermissionsInterface;
 import net.eonz.bukkit.psduo.permissions.PermissionsSetup;
 import net.eonz.bukkit.psduo.signs.PSSignCommand;
-import net.eonz.bukkit.psduo.signs.SignController;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 
 import org.bukkit.ChatColor;
@@ -60,6 +63,8 @@ public class PailStone extends JavaPlugin {
 	public PSPlayers players = new PSPlayers();
 	
 	public AreaManager areas;
+	
+	public EntityCleaner cleaner;
 
 	/**
 	 * The block listener for signs
@@ -104,6 +109,7 @@ public class PailStone extends JavaPlugin {
 
 	public void onEnable() {
 		areas = new AreaManager(this);
+		cleaner = new EntityCleaner();
 		
 		PluginDescriptionFile pdf = this.getDescription();
 
@@ -148,6 +154,8 @@ public class PailStone extends JavaPlugin {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new PSTickUpdate(TriggerType.TIMER_SECOND, sgc), 10, 20);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new PSTickUpdate(TriggerType.TIMER_HALF_SECOND, sgc), 10, 10);
 
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, cleaner, 10, 40);
+		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, tickctrl, 10, 1);
 
 		this.getCommand("trigger").setExecutor(new PSSignCommand(sgc, TriggerType.TRIGGER_COMMAND));

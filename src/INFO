@@ -1,7 +1,6 @@
 TODO
 
-	- Reload Signs
-	- Block Sensing IC
+	- Reload Signs`
 	- Spout interface
 	- Spout-Achievment IC
 	- Standardize pulse code, perhaps pull it all into PSSign and make a private pulse method?

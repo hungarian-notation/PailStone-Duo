@@ -48,12 +48,6 @@ public class CountSign extends PSSign {
 					this.setCount(0);
 				}
 			}
-		
-			if (count == countTo || (count == 0 && countTo == mod && wrapDown)) {
-				this.setOutput(true);
-			} else {
-				this.setOutput(false);
-			}
 
 			if (!wrapDown && hasMod && ((count - 1) % mod != (count - 1)))
 				this.setCount(count % mod);
@@ -61,7 +55,12 @@ public class CountSign extends PSSign {
 			if (wrapDown) {
 				this.applyMod(mod);
 			}
-
+		
+			if (count == countTo || (count == 0 && countTo == mod && wrapDown)) {
+				this.setOutput(true);
+			} else {
+				this.setOutput(false);
+			}
 		}
 	}
 

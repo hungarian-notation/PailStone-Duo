@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.eonz.bukkit.psduo.controllers.Area;
+import net.eonz.bukkit.psduo.controllers.PSPlayer;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.SignType;
 

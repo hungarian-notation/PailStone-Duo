@@ -28,7 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import net.eonz.bukkit.psduo.PSPlayer;
+import net.eonz.bukkit.psduo.controllers.PSPlayer;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 

@@ -1,4 +1,4 @@
-package net.eonz.bukkit.psduo.signs;
+package net.eonz.bukkit.psduo.controllers;
 
 /*
  * This code is Copyright (C) 2011 Chris Bode, Some Rights Reserved.
@@ -40,6 +40,8 @@ import org.bukkit.block.Sign;
 
 import net.eonz.bukkit.psduo.Direction;
 import net.eonz.bukkit.psduo.PailStone;
+import net.eonz.bukkit.psduo.signs.PSSign;
+import net.eonz.bukkit.psduo.signs.TriggerType;
 
 public class SignController {
 

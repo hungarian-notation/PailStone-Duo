@@ -1,4 +1,4 @@
-package net.eonz.bukkit.psduo;
+package net.eonz.bukkit.psduo.controllers;
 
 /*
  * This code is Copyright (C) 2011 Chris Bode, Some Rights Reserved.
@@ -25,6 +25,8 @@ package net.eonz.bukkit.psduo;
  */
 
 import java.util.ArrayList;
+
+import net.eonz.bukkit.psduo.PailStone;
 
 public class PSPlayers {
 

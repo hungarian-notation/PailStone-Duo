@@ -1,4 +1,4 @@
-package net.eonz.bukkit.psduo;
+package net.eonz.bukkit.psduo.controllers;
 
 /*
  * This code is Copyright (C) 2011 Chris Bode, Some Rights Reserved.
@@ -23,6 +23,8 @@ package net.eonz.bukkit.psduo;
  * PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the Licenses for specific 
  * language governing rights and limitations under the Licenses. 
  */
+
+import net.eonz.bukkit.psduo.PailStone;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

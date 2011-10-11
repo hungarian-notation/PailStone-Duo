@@ -27,7 +27,7 @@ package net.eonz.bukkit.psduo.signs.normal;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
-import net.eonz.bukkit.psduo.PSPlayer;
+import net.eonz.bukkit.psduo.controllers.PSPlayer;
 import net.eonz.bukkit.psduo.signs.PSSign;
 import net.eonz.bukkit.psduo.signs.TriggerType;
 import net.eonz.bukkit.psduo.signs.WirelessPacket;
