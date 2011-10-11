@@ -35,31 +35,34 @@ public class SequenceSign extends PSSign {
 	private boolean lastState[] = { false, false, false };
 
 	private boolean empty = true;
-	
+
 	private long lastTriggered = -1;
 
 	protected void triggersign(TriggerType type, Object args) {
 		long time = this.getWorld().getFullTime();
-		
+
 		if ((lastTriggered + timeOut <= time || lastTriggered > time) && !empty) {
 			this.reset();
 		}
 
 		if (args instanceof BlockRedstoneEvent) {
-			int input = this.getInputId((BlockRedstoneEvent) args);
+			if (!validate()) {
 
-			InputState is = this.getInput(input, (BlockRedstoneEvent) args);
+				int input = this.getInputId((BlockRedstoneEvent) args);
 
-			if (is == InputState.HIGH && !lastState[input]) {
-				lastState[input] = true;
+				InputState is = this.getInput(input, (BlockRedstoneEvent) args);
 
-				lastTriggered = time;
-				
-				enter(Entry.fromInput(input));
-			} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState[input]) {
-				lastState[input] = false;
-			} else {
-				return;
+				if (is == InputState.HIGH && !lastState[input]) {
+					lastState[input] = true;
+
+					lastTriggered = time;
+
+					enter(Entry.fromInput(input));
+				} else if ((is == InputState.LOW || is == InputState.DISCONNECTED) && lastState[input]) {
+					lastState[input] = false;
+				} else {
+					return;
+				}
 			}
 		}
 
@@ -70,7 +73,7 @@ public class SequenceSign extends PSSign {
 		}
 
 		this.setLine(3, dataLine);
-		
+
 		this.setOutput(validate());
 	}
 
@@ -82,7 +85,7 @@ public class SequenceSign extends PSSign {
 		}
 
 		enteredCode[enteredCode.length - 1] = entry;
-		
+
 		empty = false;
 	}
 

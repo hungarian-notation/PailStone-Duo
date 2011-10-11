@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 public class PSPlayer {
 
 	public final String name;
-	public Location loc1, loc2;
+	public Location loc1, loc2, coord;
 	public boolean l1 = true;
 	public String message = null, lastChannel = null, lastBand;
 	private final PailStone main;
@@ -54,7 +54,13 @@ public class PSPlayer {
 	}
 	
 	public boolean isOnline() {
-		return getPlayer() != null;
+		return getPlayer() != null && getPlayer().isOnline();
+	}
+	
+	public boolean coordMode = false;
+	
+	public void coordMode() {
+		coordMode = true;
 	}
 	
 	public void setLoc1(Location l) {
@@ -69,12 +75,20 @@ public class PSPlayer {
 		l1 = true;
 	}
 	
+	public void setCoord(Location l) {
+		this.coord = l;
+		this.coordMode = false;
+		this.main.alert(this.getName(), "Coordinate set.");
+	}
+	
 	public boolean validatePoints() {
 		return (loc1.getWorld() == loc2.getWorld());
 	}
 	
 	public void setLoc(Location l) {
-		if (l1) {
+		if (coordMode) {
+			setCoord(l);
+		} else if (l1) {
 			setLoc1(l);
 		} else {
 			setLoc2(l);

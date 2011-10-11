@@ -45,7 +45,7 @@ public enum SignType {
 	
 	DISP(true, false), ANNOUNCE(true, false),
 	
-	ARROW(false, true),
+	ARROW(false, true), TELEPORT(false, true),
 	
 	CUBOID(false, true), SPAWN(false, true), AREA(false, true), ITEM(false, true), BOLT(false, true);
 	

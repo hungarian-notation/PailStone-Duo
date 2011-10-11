@@ -73,11 +73,27 @@ public class PSCommand implements CommandExecutor {
 				areaManager(sender, command, label, args);
 				return true;
 			}
+
+			if (args[0].equalsIgnoreCase("coord")) {
+				coordMode(sender, command, label, args);
+				return true;
+			}
 		}
 
 		PailStone.alert(sender, "Malformed Command");
 
 		return true;
+	}
+
+	private void coordMode(CommandSender sender, Command command, String label, String[] args) {
+		if (sender instanceof Player) {
+			Player p = (Player)sender;
+			PSPlayer psp = this.main.players.safelyGet(p.getName(), main);
+			psp.coordMode();
+			PailStone.alert(sender, "Ready to designate single coordinate.");
+		} else {
+			PailStone.alert(sender, "Only a player may call this command.");
+		}
 	}
 
 	private void areaManager(CommandSender sender, Command command, String label, String[] args) {

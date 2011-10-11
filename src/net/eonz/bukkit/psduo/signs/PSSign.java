@@ -682,6 +682,9 @@ public abstract class PSSign {
 		case ARROW:
 			newSign = new ArrowSign();
 			break;
+		case TELEPORT:
+			newSign = new TeleportSign();
+			break;
 		case CUBOID:
 			newSign = new CuboidSign();
 			break;
