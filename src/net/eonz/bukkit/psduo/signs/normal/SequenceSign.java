@@ -78,8 +78,6 @@ public class SequenceSign extends PSSign {
 	}
 
 	private void enter(Entry entry) {
-		System.out.println(entry.id + " " + enteredCode.length);
-
 		for (int i = 1; i < enteredCode.length; i++) {
 			enteredCode[i - 1] = enteredCode[i];
 		}
