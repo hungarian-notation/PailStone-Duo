@@ -652,6 +652,9 @@ public abstract class PSSign {
 		case CLICK:
 			newSign = new ClickSign();
 			break;
+		case SEQUENCE:
+			newSign = new SequenceSign();
+			break;
 		case COUNT:
 			newSign = new CountSign();
 			break;

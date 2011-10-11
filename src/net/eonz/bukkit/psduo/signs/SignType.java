@@ -37,6 +37,8 @@ public enum SignType {
 	
 	SEND(true, true), RECV(true, true), TRIGGER(true, true), CLICK(true, true),
 	
+	SEQUENCE(true, true),
+	
 	COUNT(true, true), CLOCK(true, true),
 	
 	CTIME(true, true), CWEATHER(true, true), LOGGED(true, true), SENSOR(true, true),
