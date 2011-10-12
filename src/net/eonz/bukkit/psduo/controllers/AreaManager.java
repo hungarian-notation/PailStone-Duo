@@ -36,6 +36,10 @@ public class AreaManager {
 		this.areas.clear();
 
 		File[] areas = areaDirectory.listFiles();
+		if (areas == null || areas.length <= 0) {
+			this.main.c("No areas to load.");
+			return;
+		}
 		for (File f : areas) {
 			String name = f.getName().substring(0, f.getName().length() - 5);
 			String extension = f.getName().substring(f.getName().length() - 4);
